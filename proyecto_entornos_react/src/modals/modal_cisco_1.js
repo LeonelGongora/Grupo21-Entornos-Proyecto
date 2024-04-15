@@ -1,10 +1,28 @@
 import React, {useState, useEffect} from  'react';
 import '../css/modal_window_style.css'
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { styled } from '@mui/material/styles';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+
+import HelpIcon from '@mui/icons-material/Help';
+const BootstrapTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} placement="top"/>
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: theme.palette.info.dark,
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.info.dark,
+  },
+}));
+
 function ModalCisco1({estado1, cambiarEstado1}) {
 
-  const [inputComando, setInputComandos] = useState("ejemplo");
-  const [outputComando, setOutputIngresado] = useState("");
+  const [inputComando, setInputComandos] = useState('');
+  const [outputComando, setOutputComando] = useState('');
+  const [comandoCorrecto, setComandoCorrecto] = useState(false);
+  const [posicionComando, setPosicionComando] = useState(0);
+  const [mensaje, setMensaje] = useState('');
 
     const salirVentanaModal =  () => {
         cambiarEstado1(false);
@@ -19,27 +37,45 @@ function ModalCisco1({estado1, cambiarEstado1}) {
       // Procesar el comando
       const result = processCommand(inputComando);
       // Actualizar el estado de salida con el resultado
-      setOutputIngresado(outputComando + '> ' + inputComando + '\n' + result + '\n');
+      setOutputComando(outputComando + '> ' + inputComando + '\n' + result + '\n');
       // Limpiar el estado de entrada
       setInputComandos('');
     };
   
     const processCommand = (command) => {
-      let comandos_disponibles = ['']
-      // Simulación de procesamiento de comandos
-      switch (command.toLowerCase()) {
-        case 'help':
-          return 'Lista de comandos disponibles: help, echo [texto], clear';
-        case 'clear':
-          return '';
-        default:
-          if (command.startsWith('echo ')) {
-            return command.substring(5);
-          }
-          return 'Comando no reconocido. Escribe "help" para obtener ayuda.';
+      let comandos = [
+        ["router", "rip"],
+        ["network", "192.168.3.0"],
+      ];
+      let comando_ingresado_separado = command.trim().split(" ");
+
+      if (comandos[posicionComando].length !== comando_ingresado_separado.length) {
+        setMensaje("router rip");
+        return "Comando no reconocido. Mantenga cursor en ? para mas informacion";
       }
+      return compararComando(comandos[posicionComando], comando_ingresado_separado)
+
     };
 
+    const compararComando = (comando_esperado, comando_ingresado)=>{
+
+      for (let i = 0; i < comando_esperado.length; i++) {
+        if (comando_esperado[i] !== comando_ingresado[i].toLowerCase()) {
+          setMensaje("router rip 2");
+          return (
+            'Comando no reconocido. Error en "' +
+            comando_ingresado[i] +
+            '". Mantenga cursor en ? para mas informacion'
+          );
+        }
+
+        if (i === comando_esperado.length - 1) {
+          let nueva_posicion = posicionComando + 1;
+          setPosicionComando(nueva_posicion)
+          return "Correcto.";
+        }
+      }
+    }
 
     return (
       estado1 && (
@@ -61,21 +97,32 @@ function ModalCisco1({estado1, cambiarEstado1}) {
             </Container>
             <Container>
               <Row>
-                <Col>
-                  <form onSubmit={handleCommandSubmit}>
-                    <span>&gt; </span>
-                    <input
-                      type="text"
-                      value={inputComando}
-                      onChange={handleInputChange}
-                      autoFocus
-                    />
-                  </form>
+                <Col sm={1} style={{ paddingRight: "0px" }}>
+                  Router
+                  <span>&gt; </span>
                 </Col>
-                <Col>
+                <Col style={{ paddingLeft: "0px" }}>
+                  <Form onSubmit={handleCommandSubmit}>
+                    <Form.Group>
+                      <Form.Control
+                        type="text"
+                        placeholder="Ingrese su comando"
+                        onChange={handleInputChange}
+                        value={inputComando}
+                      />
+                    </Form.Group>
+                  </Form>
+                </Col>
+                <Col sm={2}>
                   <Button variant="warning" onClick={handleCommandSubmit}>
                     Ingresar
                   </Button>
+                </Col>
+
+                <Col sm={1}>
+                  <BootstrapTooltip title={mensaje}>
+                    <HelpIcon></HelpIcon>
+                  </BootstrapTooltip>
                 </Col>
               </Row>
             </Container>
