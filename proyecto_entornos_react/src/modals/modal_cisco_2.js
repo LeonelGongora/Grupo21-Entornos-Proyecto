@@ -5,6 +5,8 @@ import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 
 import HelpIcon from '@mui/icons-material/Help';
+
+
 const BootstrapTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} arrow classes={{ popper: className }} placement="top"/>
 ))(({ theme }) => ({
@@ -16,17 +18,18 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
   },
 }));
 
-function ModalCisco1({estado1, cambiarEstado1}) {
+function ModalCisco2({estado1, cambiarEstado1}) {
 
   const [inputComando, setInputComandos] = useState('');
   const [outputComando, setOutputComando] = useState('');
   const [comandoCorrecto, setComandoCorrecto] = useState(false);
   const [posicionComando, setPosicionComando] = useState(0);
+  const [mensaje, setMensaje] = useState('');
   const [comandos, setComandos] = useState([
     ["router", "rip"],
-    ["network", "192.168.3.0"],
-  ])
-  const [mensaje, setMensaje] = useState('');
+    ["network", "192.168.1.0"],
+  ]);
+
 
     const salirVentanaModal =  () => {
         cambiarEstado1(false);
@@ -49,7 +52,7 @@ function ModalCisco1({estado1, cambiarEstado1}) {
     const processCommand = (command) => {
       //let comandos = [
         //["router", "rip"],
-        //["network", "192.168.3.0"],
+        //["network", "192.168.1.0"],
       //];
       let comando_ingresado_separado = command.trim().split(" ");
 
@@ -76,10 +79,11 @@ function ModalCisco1({estado1, cambiarEstado1}) {
         if (i === comando_esperado.length - 1) {
           let nueva_posicion = posicionComando + 1;
           if(nueva_posicion >= comandos.length){
-            document.getElementById('Entrada de comandos1').readOnly = true;
+            document.getElementById('Entrada de comandos2').readOnly = true;
             return "Correcto. Este router ya se encuentra configurado!";
           }
           setPosicionComando(nueva_posicion)
+          
           return "Correcto.";
         }
       }
@@ -91,7 +95,7 @@ function ModalCisco1({estado1, cambiarEstado1}) {
           <div className="ContenedorModal">
             <div className="EncabezadoModal">
               <div className="tituloEvento">
-                <h1>Consola de Comandos Cisco No 1</h1>
+                <h1>Consola de Comandos Cisco sadaNo 1</h1>
               </div>
 
               <button className="BotonSalir" onClick={salirVentanaModal}>
@@ -117,7 +121,7 @@ function ModalCisco1({estado1, cambiarEstado1}) {
                         placeholder="Ingrese su comando"
                         onChange={handleInputChange}
                         value={inputComando}
-                        id='Entrada de comandos1'
+                        id='Entrada de comandos2'
                       />
                     </Form.Group>
                   </Form>
@@ -141,4 +145,4 @@ function ModalCisco1({estado1, cambiarEstado1}) {
     );
   }
   
-  export default ModalCisco1;
+  export default ModalCisco2;
