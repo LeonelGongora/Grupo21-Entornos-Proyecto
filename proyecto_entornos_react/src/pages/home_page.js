@@ -11,11 +11,17 @@ import {
   MDBRipple,
 } from "mdb-react-ui-kit";
 import protocolo_rip from '../images/protocolo_rip.PNG'
+import imagen_cableado from '../images/imagen_cableado.png'
 
 function HomePage() {
 
     const RedirigirRIP = () => {
       window.location.href = "./simulacionRip";
+    };
+
+    const DirigirCableado = () => {
+      window.location.href = "./simulacion_cableado";
+
     };
     
   return (
@@ -71,7 +77,29 @@ function HomePage() {
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
-          <MDBCol md="6" lg="4" className="mb-4"></MDBCol>
+          <MDBCol md="6" lg="4" className="mb-4">
+          <MDBCard onClick={DirigirCableado}>
+              <MDBRipple
+                rippleColor="light"
+                rippleTag="div"
+                className="bg-image rounded hover-zoom"
+              >
+                <MDBCardImage
+                  src={imagen_cableado}
+                  fluid
+                  className="w-100"
+                />
+              </MDBRipple>
+              <MDBCardBody>
+                <a href="#!" className="text-reset">
+                  <h5 className="card-title mb-3">
+                    Simulacion de Cableado
+                  </h5>
+                </a>
+                <h6 className="mb-3">Una descripcion</h6>
+              </MDBCardBody>
+            </MDBCard>
+          </MDBCol>
           <MDBCol md="6" lg="4" className="mb-4"></MDBCol>
           <MDBCol md="12" lg="4" className="mb-4"></MDBCol>
           <MDBCol md="6" lg="4" className="mb-4"></MDBCol>
