@@ -87,7 +87,7 @@ function HomePage() {
                 <MDBCardImage
                   src={imagen_cableado}
                   fluid
-                  className="w-100"
+                  style={{ width: '66%', height: 'auto' }}
                 />
               </MDBRipple>
               <MDBCardBody>
