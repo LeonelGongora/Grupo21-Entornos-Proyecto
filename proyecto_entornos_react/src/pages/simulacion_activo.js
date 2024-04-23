@@ -8,7 +8,7 @@ import imagen_cable_serial from '../images/imagen_cable_serial.jpg';
 import imagen_cable_ethernet from '../images/imagen_cable_ethernet.jpg';
 import imagen_cable_consola from '../images/imagen_cable_consola.jpg';
 import ImagenesCentradas from '../components/ImagenesCentradas';
-
+import Button from 'react-bootstrap/Button';
 function Simulacion_activo() {
 
     const handleClickSerial = () => {
@@ -36,9 +36,9 @@ function Simulacion_activo() {
                        1.Conectar cable consola a router cisco 1 a puerto consola del router cisco<br />
                        2.Conectar cable ethernet a puerto ethernet 1 de PC con router cisco 1 a puerto g0/1<br />
                        3.Conectar cable serial a puerto serial s0/1 de cisco 1 con puerto serial s0/0 de cisco 2</p>
-        <MDBBtn color="primary" onClick={DirigirCableado}>
+        <Button color="primary" onClick={DirigirCableado}>
             Atras
-        </MDBBtn>
+        </Button>
       </div>
       <ImagenesCentradas></ImagenesCentradas>
       <BotonTipoCable onClick={handleClickSerial} left={30} transform={-100} imagenSrc={imagen_cable_serial}></BotonTipoCable>

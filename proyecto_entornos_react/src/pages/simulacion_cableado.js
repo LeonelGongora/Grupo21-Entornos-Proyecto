@@ -8,7 +8,7 @@ import imagen_cable_serial from '../images/imagen_cable_serial.jpg';
 import imagen_cable_ethernet from '../images/imagen_cable_ethernet.jpg';
 import imagen_cable_consola from '../images/imagen_cable_consola.jpg';
 import ImagenesCentradas from '../components/ImagenesCentradas';
-
+import Button from 'react-bootstrap/Button';
 function Simulacion_cableado(props) {
 
     const handleClickSerial = () => {
@@ -36,9 +36,9 @@ function Simulacion_cableado(props) {
                        1.Seleccionar el cable<br />
                        2.Seleccionar el dispositivo donde conectar el cable<br />
                        3.Elegir el puerto a conectar de inicio y puerto final</p>
-        <MDBBtn color="primary" onClick={DirigirCableadoActivo}>
+        <Button color="primary" onClick={DirigirCableadoActivo}>
             Iniciar Simulación
-        </MDBBtn>
+        </Button>
       </div>
       <ImagenesCentradas></ImagenesCentradas>
       <BotonTipoCable onClick={handleClickSerial} left={30} transform={-100} imagenSrc={imagen_cable_serial}></BotonTipoCable>
