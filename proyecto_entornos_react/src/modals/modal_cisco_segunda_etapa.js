@@ -56,6 +56,14 @@ function ModalCiscoSegundaEtapa({estado1, cambiarEstado1}) {
 
       if (!values.primero.trim()) {
         validationErrors.primero = "Este campo es obligatorio";
+      }else if(values.primero !== "terminal"){
+        validationErrors.primero = "Comando incorrecto";
+      }
+
+      if (!values.segundo.trim()) {
+        validationErrors.segundo = "Este campo es obligatorio";
+      }else if(values.segundo !== "2"){
+        validationErrors.segundo = "Comando incorrecto";
       }
 
       setErrors(validationErrors);
@@ -155,56 +163,24 @@ function ModalCiscoSegundaEtapa({estado1, cambiarEstado1}) {
 
                 <Row className="mb-3">
                   <Row>
-                    <Col>
+                    <Col xs={2}>
                       <pre>
-                        {">"} Version <input style={{ width: "100px" }}></input>
+                        {">"} Version
                       </pre>
                     </Col>
                     <Col xs={2}>
-                      <BootstrapTooltip title={"aasass"}>
-                        <HelpIcon></HelpIcon>
-                      </BootstrapTooltip>
-                    </Col>
-                  </Row>
-                </Row>
+                    <input
+                      style={{ width: "100px" }}
+                      name="segundo"
+                      onBlur={handleInput}
+                    ></input>
 
-                <Row className="mb-3">
-                  <Row>
-                    <Col>
-                      <pre>
-                        {">"} Version <input style={{ width: "100px" }}></input>
-                      </pre>
-                    </Col>
-                    <Col xs={2}>
-                      <BootstrapTooltip title={"aasass"}>
-                        <HelpIcon></HelpIcon>
-                      </BootstrapTooltip>
-                    </Col>
-                  </Row>
-                </Row>
-
-                <Row className="mb-3">
-                  <Row>
-                    <Col>
-                      <pre>
-                        {">"} Version <input style={{ width: "100px" }}></input>
-                      </pre>
-                    </Col>
-                    <Col xs={2}>
-                      <BootstrapTooltip title={"aasass"}>
-                        <HelpIcon></HelpIcon>
-                      </BootstrapTooltip>
-                    </Col>
-                  </Row>
-                </Row>
-
-                <Row className="mb-3">
-                  <Row>
-                    <Col>
-                      <pre>
-                        {">"} Version <input style={{ width: "100px" }}></input>
-                      </pre>
-                    </Col>
+                    {errors.segundo && (
+                      <span className="advertencia-creEve">
+                        {errors.segundo}
+                      </span>
+                    )}
+                  </Col>
                     <Col xs={2}>
                       <BootstrapTooltip title={"aasass"}>
                         <HelpIcon></HelpIcon>
