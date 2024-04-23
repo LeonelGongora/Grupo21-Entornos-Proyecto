@@ -95,7 +95,7 @@ function ModalCisco2({estado1, cambiarEstado1}) {
           <div className="ContenedorModal">
             <div className="EncabezadoModal">
               <div className="tituloEvento">
-                <h1>Consola de Comandos Cisco sadaNo 1</h1>
+                <h1>Tercera Etapa</h1>
               </div>
 
               <button className="BotonSalir" onClick={salirVentanaModal}>
