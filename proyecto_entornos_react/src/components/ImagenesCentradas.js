@@ -11,8 +11,8 @@ const ImagenesCentradas = () => {
 
   const styles = {
     smallImage: {
-      width: '70px',
-      height: '70px',
+      width: '50px',
+      height: '50px',
       margin: '5px', // Ajusta según necesites
     },
   };
