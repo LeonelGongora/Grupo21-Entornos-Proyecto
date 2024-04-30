@@ -4,7 +4,7 @@ import BotonTipoCable from '../components/BotonTipoCable';
 import imagen_cable_serial from '../images/imagen_cable_serial.jpg';
 import imagen_cable_ethernet from '../images/imagen_cable_ethernet.jpg';
 import imagen_cable_consola from '../images/imagen_cable_consola.jpg';
-import ImagenesCentradas from '../components/ImagenesCentradas';
+import CanvasComponent from '../components/CanvasComponent';
 import Button from 'react-bootstrap/Button';
 import React, { useState } from 'react';
 
@@ -64,15 +64,19 @@ function Simulacion_cableado(props) {
           {textoBoton}
         </Button>
       </div>
+      <div>
       <Button color="primary" onClick={RegresarHomePage}>
           Volver al Menu
         </Button>
+
+      </div>
+
       
-      <ImagenesCentradas />
+      <CanvasComponent/>
     
       <BotonTipoCable onClick={handleClickSerial} left={30} transform={-100} imagenSrc={imagen_cable_serial}></BotonTipoCable>
-      <BotonTipoCable onClick={handleClickEthernet} left={60} transform={-100} imagenSrc={imagen_cable_ethernet}></BotonTipoCable>
-      <BotonTipoCable onClick={handleClickConsola} left={90} transform={-100} imagenSrc={imagen_cable_consola}></BotonTipoCable>
+      <BotonTipoCable onClick={handleClickEthernet} left={50} transform={-100} imagenSrc={imagen_cable_ethernet}></BotonTipoCable>
+      <BotonTipoCable onClick={handleClickConsola} left={70} transform={-100} imagenSrc={imagen_cable_consola}></BotonTipoCable>
      
     </div>  
   );
