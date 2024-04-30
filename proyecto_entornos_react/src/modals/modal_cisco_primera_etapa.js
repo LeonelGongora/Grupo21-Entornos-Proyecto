@@ -26,6 +26,16 @@ function ModalCiscoPrimeraEtapa({estado1, cambiarEstado1}) {
     ["router", "rip"],
     ["network", "192.168.3.0"],
   ])
+
+  const [comandoPrimeraEtapa, setComandosPrimeraEtapa] = useState([
+    {comando: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado", pista: 'Esto es una ayuda'},
+    {comando: "configure terminal", explicacion: "El comando configure terminal se utiliza para acceder al modo de configuración global en dispositivos Cisco"},
+    {comando: "version 2", explicacion: "Este comando se utiliza dentro del modo de configuración de RIP en Cisco Packet Tracer para especificar que el enrutador debe utilizar la versión 2 del protocolo RIP en lugar de la versión original (RIP v1)"},
+    {comando: "network 192.168.1.0", explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.1.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
+    {comando: "network 192.168.2.0", explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.2.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
+    {comando: "exit", explicacion: "Se utilizar para salir del modo configuracion y volver al modo priviligeado."}
+  ]);
+
   const [mensaje, setMensaje] = useState('');
 
     const salirVentanaModal =  () => {
@@ -47,10 +57,6 @@ function ModalCiscoPrimeraEtapa({estado1, cambiarEstado1}) {
     };
   
     const processCommand = (command) => {
-      //let comandos = [
-        //["router", "rip"],
-        //["network", "192.168.3.0"],
-      //];
       let comando_ingresado_separado = command.trim().split(" ");
 
       if (comandos[posicionComando].length !== comando_ingresado_separado.length) {
@@ -103,132 +109,31 @@ function ModalCiscoPrimeraEtapa({estado1, cambiarEstado1}) {
               style={{ overflowY: "scroll", height: "300px" }}
             >
               <div className="console">
-                <Row className="mb-3">
-                  <Row>
-                    <Col>
-                      <pre>{">"} enable</pre>
-                    </Col>
-                    <Col xs={2}>
-                      <BootstrapTooltip title={"aasass"}>
-                        <HelpIcon></HelpIcon>
-                      </BootstrapTooltip>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <p>
-                        El comando enable se utiliza para acceder al modo EXEC
-                        privilegiado
-                      </p>
-                    </Col>
-                  </Row>
-                </Row>
-
-                <Row className="mb-3">
-                  <Row>
-                    <Col>
-                      <pre>{">"} configure terminal</pre>
-                    </Col>
-                    <Col xs={2}>
-                      <BootstrapTooltip title={"aasass"}>
-                        <HelpIcon></HelpIcon>
-                      </BootstrapTooltip>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <p>
-                      El comando configure terminal se utiliza para acceder al modo de configuración global en dispositivos Cisco
-                      </p>
-                    </Col>
-                  </Row>
-                </Row>
-
-                <Row className="mb-3">
-                  <Row>
-                    <Col>
-                      <pre>{">"} version 2</pre>
-                    </Col>
-                    <Col xs={2}>
-                      <BootstrapTooltip title={"aasass"}>
-                        <HelpIcon></HelpIcon>
-                      </BootstrapTooltip>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs={10}>
-                      <p>
-                      Este comando se utiliza dentro del modo de configuración 
-                      de RIP en Cisco Packet Tracer para especificar que el enrutador debe 
-                      utilizar la versión 2 del protocolo RIP en lugar de la versión original (RIPv1).
-                      </p>
-                    </Col>
-                  </Row>
-                </Row>
-
-                <Row className="mb-3">
-                  <Row>
-                    <Col>
-                      <pre>{">"} network 192.168.1.0</pre>
-                    </Col>
-                    <Col xs={2}>
-                      <BootstrapTooltip title={"aasass"}>
-                        <HelpIcon></HelpIcon>
-                      </BootstrapTooltip>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs={10}>
-                      <p>
-                      Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP 
-                      que pertenezcan a la subred 192.168.1.0 y las incluya en el proceso de enrutamiento RIP, es decir, 
-                      que las incluya en la tabla de enrutamiento del router.
-                      </p>
-                    </Col>
-                  </Row>
-                </Row>
-
-                <Row className="mb-3">
-                  <Row>
-                    <Col>
-                      <pre>{">"} network 192.168.2.0</pre>
-                    </Col>
-                    <Col xs={2}>
-                      <BootstrapTooltip title={"aasass"}>
-                        <HelpIcon></HelpIcon>
-                      </BootstrapTooltip>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs={10}>
-                      <p>
-                      Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP 
-                      que pertenezcan a la subred 192.168.2.0 y las incluya en el proceso de enrutamiento RIP, es decir, 
-                      que las incluya en la tabla de enrutamiento del router.
-                      </p>
-                    </Col>
-                  </Row>
-                </Row>
-
-                <Row className="mb-3">
-                  <Row>
-                    <Col>
-                      <pre>{">"} exit</pre>
-                    </Col>
-                    <Col xs={2}>
-                      <BootstrapTooltip title={"aasass"}>
-                        <HelpIcon></HelpIcon>
-                      </BootstrapTooltip>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs={10}>
-                      <p>
-                      Se utilizar para salir del modo configuracion y volver al modo priviligeado.
-                      </p>
-                    </Col>
-                  </Row>
-                </Row>
+                {comandoPrimeraEtapa.map((comando) => {
+                  return (
+                    <>
+                      <Row className="mb-3">
+                        <Row>
+                          <Col>
+                            <pre>{">"} {comando.comando}</pre>
+                          </Col>
+                          <Col xs={2}>
+                            <BootstrapTooltip title={comando.pista}>
+                              <HelpIcon></HelpIcon>
+                            </BootstrapTooltip>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <p>
+                            {comando.explicacion}
+                            </p>
+                          </Col>
+                        </Row>
+                      </Row>
+                    </>
+                  );
+                })}
 
                 <pre>{outputComando}</pre>
               </div>

@@ -20,13 +20,18 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
 function ModalCiscoSegundaEtapa({estado1, cambiarEstado1}) {
 
   const [inputComando, setInputComandos] = useState('');
-  const [outputComando, setOutputComando] = useState('');
-  const [comandoCorrecto, setComandoCorrecto] = useState(false);
   const [posicionComando, setPosicionComando] = useState(0);
   const [comandos, setComandos] = useState([
     ["router", "rip"],
     ["network", "192.168.3.0"],
   ])
+
+  const [comandosSegundaEtapa, setComandosSegundaEtapa] = useState([
+    {comando: "enable", respuesta: "El com", posicion : 1 },
+  ]);
+
+  const [pistas, setPistas] = useState(['', '', '', '', '']);
+
   const [mensaje, setMensaje] = useState('');
 
   const [errors, setErrors] = useState({});
@@ -56,14 +61,34 @@ function ModalCiscoSegundaEtapa({estado1, cambiarEstado1}) {
 
       if (!values.primero.trim()) {
         validationErrors.primero = "Este campo es obligatorio";
+        pistas[0] = 'Pista 1';
       }else if(values.primero !== "terminal"){
         validationErrors.primero = "Comando incorrecto";
+        pistas[0] = 'Pista 2';
       }
 
       if (!values.segundo.trim()) {
         validationErrors.segundo = "Este campo es obligatorio";
       }else if(values.segundo !== "2"){
         validationErrors.segundo = "Comando incorrecto";
+      }
+
+      if (!values.tercero.trim()) {
+        validationErrors.tercero = "Este campo es obligatorio";
+      }else if(values.tercero !== "2"){
+        validationErrors.tercero = "Comando incorrecto";
+      }
+
+      if (!values.cuarto.trim()) {
+        validationErrors.cuarto = "Este campo es obligatorio";
+      }else if(values.cuarto !== "2"){
+        validationErrors.cuarto = "Comando incorrecto";
+      }
+
+      if (!values.quinto.trim()) {
+        validationErrors.quinto = "Este campo es obligatorio";
+      }else if(values.quinto !== "exit"){
+        validationErrors.quinto = "Comando incorrecto";
       }
 
       setErrors(validationErrors);
@@ -123,24 +148,23 @@ function ModalCiscoSegundaEtapa({estado1, cambiarEstado1}) {
               style={{ overflowY: "scroll", height: "300px" }}
             >
               <div className="console">
+                {comandosSegundaEtapa.map((comando) => {
+                  return <></>;
+                })}
+
                 <Row className="mb-3">
                   <Row>
                     <Col>
                       <pre>{">"} enable</pre>
                     </Col>
-                    <Col xs={2}>
-                      <BootstrapTooltip title={"aasass"}>
-                        <HelpIcon></HelpIcon>
-                      </BootstrapTooltip>
-                    </Col>
                   </Row>
                 </Row>
 
                 <Row className="mb-3">
-                  <Col xs={2}>
+                  <Col xs={2} style={{ paddingRight: "0px" }}>
                     <pre>{">"} configure </pre>
                   </Col>
-                  <Col xs={2}>
+                  <Col xs={2} style={{ paddingLeft: "0px" }}>
                     <input
                       style={{ width: "100px" }}
                       name="primero"
@@ -155,7 +179,7 @@ function ModalCiscoSegundaEtapa({estado1, cambiarEstado1}) {
                   </Col>
 
                   <Col xs={2}>
-                    <BootstrapTooltip title={"aasass"}>
+                    <BootstrapTooltip title={pistas[0]}>
                       <HelpIcon></HelpIcon>
                     </BootstrapTooltip>
                   </Col>
@@ -165,31 +189,105 @@ function ModalCiscoSegundaEtapa({estado1, cambiarEstado1}) {
                   <Row>
                     <Col xs={2}>
                       <pre>
-                        {">"} Version
+                        {">"}{" "}
+                        <input
+                          style={{ width: "100px" }}
+                          name="segundo"
+                          onBlur={handleInput}
+                        ></input>
+                        {errors.segundo && (
+                          <span className="advertencia-creEve">
+                            {errors.segundo}
+                          </span>
+                        )}
                       </pre>
                     </Col>
                     <Col xs={2}>
-                    <input
-                      style={{ width: "100px" }}
-                      name="segundo"
-                      onBlur={handleInput}
-                    ></input>
-
-                    {errors.segundo && (
-                      <span className="advertencia-creEve">
-                        {errors.segundo}
-                      </span>
-                    )}
-                  </Col>
+                      <pre>2</pre>
+                    </Col>
                     <Col xs={2}>
-                      <BootstrapTooltip title={"aasass"}>
+                      <BootstrapTooltip title={pistas[1]}>
                         <HelpIcon></HelpIcon>
                       </BootstrapTooltip>
                     </Col>
                   </Row>
                 </Row>
 
-                <pre>{outputComando}</pre>
+                <Row className="mb-3">
+                  <Row>
+                    <Col xs={2}>
+                      <pre>{">"} network</pre>
+                    </Col>
+                    <Col xs={2}>
+                      <input
+                        style={{ width: "100px" }}
+                        name="tercero"
+                        onBlur={handleInput}
+                      ></input>
+
+                      {errors.tercero && (
+                        <span className="advertencia-creEve">
+                          {errors.tercero}
+                        </span>
+                      )}
+                    </Col>
+                    <Col xs={2}>
+                      <BootstrapTooltip title={pistas[2]}>
+                        <HelpIcon></HelpIcon>
+                      </BootstrapTooltip>
+                    </Col>
+                  </Row>
+                </Row>
+
+                <Row className="mb-3">
+                  <Row>
+                    <Col xs={2}>
+                      <pre>{">"} network</pre>
+                    </Col>
+                    <Col xs={2}>
+                      <input
+                        style={{ width: "100px" }}
+                        name="cuarto"
+                        onBlur={handleInput}
+                      ></input>
+
+                      {errors.cuarto && (
+                        <span className="advertencia-creEve">
+                          {errors.cuarto}
+                        </span>
+                      )}
+                    </Col>
+                    <Col xs={2}>
+                      <BootstrapTooltip title={pistas[3]}>
+                        <HelpIcon></HelpIcon>
+                      </BootstrapTooltip>
+                    </Col>
+                  </Row>
+                </Row>
+
+                <Row className="mb-3">
+                  <Row>
+                    <Col xs={3}>
+                      <pre>{">"}  <input
+                        style={{ width: "100px" }}
+                        name="quinto"
+                        onBlur={handleInput}
+                      ></input>
+
+                      {errors.quinto && (
+                        <span className="advertencia-creEve">
+                          {errors.quinto}
+                        </span>
+                      )}</pre>
+                    </Col>
+                    <Col xs={2}>
+                      <BootstrapTooltip title={pistas[4]}>
+                        <HelpIcon></HelpIcon>
+                      </BootstrapTooltip>
+                    </Col>
+                  </Row>
+                </Row>
+
               </div>
             </Container>
             <Container>
