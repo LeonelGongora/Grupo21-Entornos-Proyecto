@@ -14,18 +14,18 @@ import entradaSerialCisco21 from '../images/entradaSerial.png';
 
 function CanvasComponent() {
   const images = [
-    { nombreEntrada: 'Serial 1', src: entradaSerialCisco1, x: 50, y: 250, action: 'entradaSerialCisco1'  },
-    { nombreEntrada: 'Serial 2', src: entradaSerialCisco11, x: 150, y: 250, action: 'entradaSerialCisco11'  },
-    { nombreEntrada: 'Ethernet 1', src: entradaEthernetCisco1, x: 250, y: 250, action: 'entradaEthernetCisco1'  },
-    { nombreEntrada: 'Ethernet 2', src: entradaEthernetCisco11, x: 350, y: 250, action: 'entradaEthernetCisco11'  },
-    { nombreEntrada: 'Consola', src: entradaConsolaCisco1, x: 450, y: 250, action: 'entradaConsolaCisco1' },
-    { nombreEntrada: 'USB', src: entradaUsbPC, x: 600, y: 70, action: 'entradaUsbPC'  },
-    { nombreEntrada: 'Ethernet', src: entradaEthernetPC, x: 700, y: 70, action: 'entradaEthernetPC'  },
-    { nombreEntrada: 'Serial 1', src: entradaSerialCisco2, x: 850, y: 250, action: 'entradaSerialCisco2'  },
-    { nombreEntrada: 'Serial 1', src: entradaSerialCisco21, x: 950, y: 250, action: 'entradaSerialCisco21'  },
-    { nombreEntrada: 'Ethernet 1', src: entradaEthernetCisco2, x: 1050, y: 250, action: 'entradaEthernetCisco2'  },
-    { nombreEntrada: 'Ethernet 2',src: entradaEthernetCisco21, x: 1150, y: 250, action: 'entradaEthernetCisco21'  },
-    { nombreEntrada: 'Consola', src: entradaConsolaCisco2, x: 1250, y: 250, action: 'entradaConsolaCisco2'  }
+    { nombreEntrada: 'Serial 1', src: entradaSerialCisco1, x: 150, y: 50, action: 'entradaSerialCisco1'  },
+    { nombreEntrada: 'Serial 2', src: entradaSerialCisco11, x: 150, y: 175, action: 'entradaSerialCisco11'  },
+    { nombreEntrada: 'Ethernet 1', src: entradaEthernetCisco1, x: 150, y: 300, action: 'entradaEthernetCisco1'  },
+    { nombreEntrada: 'Ethernet 2', src: entradaEthernetCisco11, x: 150, y: 425, action: 'entradaEthernetCisco11'  },
+    { nombreEntrada: 'Consola', src: entradaConsolaCisco1, x: 150, y: 550, action: 'entradaConsolaCisco1' },
+    { nombreEntrada: 'USB', src: entradaUsbPC, x: 600, y: 50, action: 'entradaUsbPC'  },
+    { nombreEntrada: 'Ethernet', src: entradaEthernetPC, x: 700, y: 50, action: 'entradaEthernetPC'  },
+    { nombreEntrada: 'Serial 1', src: entradaSerialCisco2, x: 1150, y: 50, action: 'entradaSerialCisco2'  },
+    { nombreEntrada: 'Serial 1', src: entradaSerialCisco21, x: 1150, y: 175, action: 'entradaSerialCisco21'  },
+    { nombreEntrada: 'Ethernet 1', src: entradaEthernetCisco2, x: 1150, y: 300, action: 'entradaEthernetCisco2'  },
+    { nombreEntrada: 'Ethernet 2',src: entradaEthernetCisco21, x: 1150, y: 425, action: 'entradaEthernetCisco21'  },
+    { nombreEntrada: 'Consola', src: entradaConsolaCisco2, x: 1150, y: 550, action: 'entradaConsolaCisco2'  }
   ];
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -34,10 +34,10 @@ function CanvasComponent() {
 
     setTimeout(() => {
       ctx.font = '20px Arial';
-      ctx.fillStyle = 'white';
-      ctx.fillText('Cisco 1', 250, 200);
+      ctx.fillStyle = 'black';
+      ctx.fillText('Cisco 1', 50, 325);
       ctx.fillText('PC', 650, 30);
-      ctx.fillText('Cisco 2', 1050, 200);
+      ctx.fillText('Cisco 2', 1300, 325);
     }, 10);
 
     images.forEach(imageData => {
@@ -47,13 +47,13 @@ function CanvasComponent() {
  
         ctx.drawImage(img, imageData.x, imageData.y,  imageSize, imageSize);
         ctx.font = '20px Arial';
-        ctx.fillStyle = 'white';
-        ctx.fillText(imageData.nombreEntrada, imageData.x, imageData.y+120);
+        ctx.fillStyle = 'black';
+        ctx.fillText(imageData.nombreEntrada, imageData.x, imageData.y+110);
       };
     });
 
-    ctx.fillStyle = '#000000';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#FFFFFF';
+    //ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     canvas.addEventListener('click', handleClick);
 
@@ -110,6 +110,32 @@ function CanvasComponent() {
      {action1: 'entradaUsbPC',action2:'entradaConsolaCisco2'}
   ];
   useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+
+    // Función para dibujar las líneas en el canvas
+    function drawLines() {
+      
+      //ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas antes de dibujar nuevas líneas
+
+      ctx.strokeStyle = 'red'; // Color de las líneas
+      ctx.lineWidth = 5; // Grosor de las líneas
+      
+      clickedImages.forEach(line => {
+        ctx.beginPath();
+        ctx.moveTo(line.x1+40, line.y1+40); // Punto inicial de la línea
+        ctx.lineTo(line.x2+40, line.y2+40); // Punto final de la línea
+        ctx.stroke(); // Dibujar la línea
+      });
+    }
+
+    // Llamar a la función drawLines al montar el componente y cada vez que linesData cambie
+    drawLines();
+
+  }, [clickedImages]);
+
+
+  useEffect(() => {
     const lastTwo = clickedImages.pop();
     if (lastTwo) {
       const existeParValido = paresValidos.some(par => {
@@ -133,30 +159,16 @@ function CanvasComponent() {
         }
         if(!existeEnPulsados && !existeEnCadenas){
           clickedImages.push(lastTwo);
+          alert('Conexion realizada');
         }
     }
     console.log('imagenes clickeadas',clickedImages);
   }
-  /** 
-     
-       if(existeEnPulsados){
-          setLastTwoClickedImages(lastTwo);
-          console.log('Last Two Clicked Images:', lastTwo);
-          setClickedImages(prevClickedImages => prevClickedImages.slice(0, -2));
-          console.log('¿El par ya existe en pulsados?', existeEnPulsados);
-        } 
-      }
-      if(!existeParValido){
-            setLastTwoClickedImages(lastTwo);
-            console.log('Last Two Clicked Images:', lastTwo);
-            setClickedImages(prevClickedImages => prevClickedImages.slice(0, -2));
-            console.log('¿El par existe en pares válidos?', existeParValido);
-      }**/
   }, [clickedImages]);
 
 
   return (
-    <canvas ref={canvasRef} width={1500} height={400} />
+    <canvas ref={canvasRef} width={1500} height={700} />
   );
 }
 export default CanvasComponent;
