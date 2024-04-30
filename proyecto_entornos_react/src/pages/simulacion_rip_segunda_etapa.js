@@ -18,7 +18,8 @@ import {
 import BarraSuperior from '../components/BarraSuperior';
 
 import imagen_cisco from '../images/imagen_router_cisco.jpg'
-function SimulacionRip() {
+
+function SimulacionRipSegundaEtapa() {
 
     const [values, setValues] = useState({
         estado_modal_1 : false
@@ -84,46 +85,38 @@ function SimulacionRip() {
 
       <MDBRow className="my-3">
         <MDBCol className="d-flex align-items-center justify-content-center">
-          <h2>Primera Etapa</h2>
+          <h2>
+            Segunda Etapa
+          </h2>
         </MDBCol>
       </MDBRow>
 
-      <MDBRow>
-        <MDBCol md='10'>
-          <div className="d-flex justify-content-between align-items-center mb-5">
-            {mostrarInstrucciones ? (
-              <p style={{ marginLeft: "10px" }}>
-                Instrucciones:
-                <br />
-                1. Seleccionar el cable
-                <br />
-                2. Seleccionar el dispositivo donde conectar el cable
-                <br />
-                3. Elegir el puerto a conectar de inicio y puerto final
-              </p>
-            ) : (
-              <p style={{ marginLeft: "10px" }}>
-                Desafio:
-                <br />
-                1.Conectar cable consola a router cisco 1 a puerto consola del
-                router cisco
-                <br />
-                2.Conectar cable ethernet a puerto ethernet 1 de PC con router
-                cisco 1 a puerto g0/1
-                <br />
-                3.Conectar cable serial a puerto serial s0/1 de cisco 1 con
-                puerto serial s0/0 de cisco 2
-              </p>
-            )}
-          </div>
-        </MDBCol>
-
-        <MDBCol md='2'>
-          <Button  variant="primary" onClick={() => window.location.href = "./simulacionRipSegundaEtapa"}>
-            Siguiente etapa
-          </Button>
-        </MDBCol>
-      </MDBRow>
+      <div className="d-flex justify-content-between align-items-center mb-5">
+        {mostrarInstrucciones ? (
+          <p style={{ marginLeft: "10px" }}>
+            Instrucciones:
+            <br />
+            1. Seleccionar el cable
+            <br />
+            2. Seleccionar el dispositivo donde conectar el cable
+            <br />
+            3. Elegir el puerto a conectar de inicio y puerto final
+          </p>
+        ) : (
+          <p style={{ marginLeft: "10px" }}>
+            Desafio:
+            <br />
+            1.Conectar cable consola a router cisco 1 a puerto consola del
+            router cisco
+            <br />
+            2.Conectar cable ethernet a puerto ethernet 1 de PC con router cisco
+            1 a puerto g0/1
+            <br />
+            3.Conectar cable serial a puerto serial s0/1 de cisco 1 con puerto
+            serial s0/0 de cisco 2
+          </p>
+        )}
+      </div>
 
       <MDBRow className="mb-3">
         <MDBCol lg={4} md={12} className="mb-4 mb-lg-0">
@@ -196,4 +189,4 @@ function SimulacionRip() {
   );
 }
 
-export default SimulacionRip;
+export default SimulacionRipSegundaEtapa;
