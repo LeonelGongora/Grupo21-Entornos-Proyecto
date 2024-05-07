@@ -5,79 +5,92 @@ import ModalCiscoPrimeraEtapa from '../modals/modal_cisco_primera_etapa';
 import ModalCiscoSegundaEtapa from '../modals/modal_cisco_segunda_etapa';
 import Button from 'react-bootstrap/Button';
 import {
-  MDBContainer,
   MDBCol,
   MDBRow,
-  MDBModal,
-  MDBModalBody,
-  MDBModalFooter,
-  MDBBtn,
-  MDBModalDialog,
-  MDBModalContent,
 } from 'mdb-react-ui-kit';
 import BarraSuperior from '../components/BarraSuperior';
 
 import imagen_cisco from '../images/imagen_router_cisco.jpg'
 function SimulacionRip() {
 
-    const [values, setValues] = useState({
-        estado_modal_1 : false
-    });
+  useEffect(()=>{
+    generarDesafio()
+  }, []);
 
-    const [estado_modal2, setEstadoModal2] = useState(false);
     const [estado_primera_etapa, setPrimeraEtapa] = useState(false);
-    const [estado_segunda_etapa, setSegundaEtapa] = useState(false);
     const [mostrarInstrucciones, setMostrarInstrucciones] = useState(false);
 
-    const cambiarEstadoModal1 = (nuevoEstado) => {
-        setValues({
-            estado_modal_1:nuevoEstado,
-        });
-    };
-
-    const cambiarEstadoModal2 = (nuevoEstado) => {
-      setEstadoModal2(nuevoEstado)
-    };
-
-    const cambiarEstadoPrimeraEtapa = (nuevoEstado) => {
+    const cambiarEstadoPrimeraEtapa = (nuevoEstado, comandos) => {
+      setComandoVariable(comandos)
       setPrimeraEtapa(nuevoEstado)
     };
 
-    const cambiarEstadoSegundaEtapa = (nuevoEstado) => {
-      setSegundaEtapa(nuevoEstado)
-    };
+    const [comandoCisco1PrimeraEtapa, setComandoCisco1PrimeraEtapa] = useState([
+      {comando: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado", pista: 'Esto es una ayuda'},
+      {comando: "configure terminal", explicacion: "El comando configure terminal se utiliza para acceder al modo de configuración global en dispositivos Cisco"},
+      {comando: "version 2", explicacion: "Este comando se utiliza dentro del modo de configuración de RIP en Cisco Packet Tracer para especificar que el enrutador debe utilizar la versión 2 del protocolo RIP en lugar de la versión original (RIP v1)"},
+      {comando: "network 192.168.1.0", explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.1.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
+      {comando: "network 192.168.2.0", explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.2.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
+      {comando: "exit", explicacion: "Se utilizar para salir del modo configuracion y volver al modo priviligeado."}
+    ]);
+
+    const [comandoCisco2PrimeraEtapa, setComandoCisco2PrimeraEtapa] = useState([
+      {comando: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado", pista: 'Esto es una ayuda'},
+      {comando: "configure terminal", explicacion: "El comando configure terminal se utiliza para acceder al modo de configuración global en dispositivos Cisco"},
+      {comando: "version 3", explicacion: "Este comando se utiliza dentro del modo de configuración de RIP en Cisco Packet Tracer para especificar que el enrutador debe utilizar la versión 2 del protocolo RIP en lugar de la versión original (RIP v1)"},
+      {comando: "network 192.168.1.0", explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.1.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
+      {comando: "network 192.168.2.0", explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.2.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
+      {comando: "exit", explicacion: "Se utilizar para salir del modo configuracion y volver al modo priviligeado."}
+    ]);
+
+    const [comandoPCPrimeraEtapa, setComandoPCPrimeraEtapa] = useState([
+      {comando: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado", pista: 'Esto es una ayuda'},
+      {comando: "configure terminal", explicacion: "El comando configure terminal se utiliza para acceder al modo de configuración global en dispositivos Cisco"},
+      {comando: "version 4", explicacion: "Este comando se utiliza dentro del modo de configuración de RIP en Cisco Packet Tracer para especificar que el enrutador debe utilizar la versión 2 del protocolo RIP en lugar de la versión original (RIP v1)"},
+      {comando: "network 192.168.1.0", explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.1.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
+      {comando: "network 192.168.2.0", explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.2.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
+      {comando: "exit", explicacion: "Se utilizar para salir del modo configuracion y volver al modo priviligeado."}
+    ]);
+
+    const [comandoVariable, setComandoVariable] = useState([]);
 
     const generarDesafio = () => {
+      let primerNumero = generarPrimerNumero().toString()
+      let segundoNumero = generarOtrosNumeros().toString()
+      let tercerNumero = generarOtrosNumeros().toString()
+      let cuartoNumero = generarOtrosNumeros().toString()
 
-      let max = 10;
-      let min = 5;
+      let network = primerNumero +"."+segundoNumero+"."+tercerNumero+"."+cuartoNumero
+
+      console.log(network)
+    };
+
+    const generarPrimerNumero = () => {
+
+      let max = 128;
+      let min = 223;
 
       var numeroAleatorio = Math.random();
+      var primerNumero = Math.floor(numeroAleatorio * (max - min + 1)) + min;
+      return primerNumero;
+    };
 
-      // Ajustar el número al rango dado y redondearlo al entero más cercano
-      var numeroEnRango = Math.floor(numeroAleatorio * (max - min + 1)) + min;
+    const generarOtrosNumeros = () => {
+
+      let max = 0;
+      let min = 255;
+
+      var numeroAleatorio = Math.random();
+      var primerNumero = Math.floor(numeroAleatorio * (max - min + 1)) + min;
+      return primerNumero;
     };
 
   return (
     <>
-      <ModalCisco1
-        estado1={values.estado_modal_1}
-        cambiarEstado1={cambiarEstadoModal1}
-      />
-
-      <ModalCisco2
-        estado1={estado_modal2}
-        cambiarEstado1={cambiarEstadoModal2}
-      />
-
       <ModalCiscoPrimeraEtapa
         estado1={estado_primera_etapa}
         cambiarEstado1={cambiarEstadoPrimeraEtapa}
-      />
-
-      <ModalCiscoSegundaEtapa
-        estado1={estado_segunda_etapa}
-        cambiarEstado1={cambiarEstadoSegundaEtapa}
+        comandosVariable = {comandoVariable}
       />
 
       <BarraSuperior titulo="Simulacion de Protocolo RIP" />
@@ -91,35 +104,20 @@ function SimulacionRip() {
       <MDBRow>
         <MDBCol md='10'>
           <div className="d-flex justify-content-between align-items-center mb-5">
-            {mostrarInstrucciones ? (
               <p style={{ marginLeft: "10px" }}>
                 Instrucciones:
                 <br />
-                1. Seleccionar el cable
+                1. Entrar a la configuracion de los dispositivos
                 <br />
-                2. Seleccionar el dispositivo donde conectar el cable
+                2. Leer las instrucciones y explicaciones de los comandos utilizados
                 <br />
-                3. Elegir el puerto a conectar de inicio y puerto final
+                3. Pase a la siguiente etapa
               </p>
-            ) : (
-              <p style={{ marginLeft: "10px" }}>
-                Desafio:
-                <br />
-                1.Conectar cable consola a router cisco 1 a puerto consola del
-                router cisco
-                <br />
-                2.Conectar cable ethernet a puerto ethernet 1 de PC con router
-                cisco 1 a puerto g0/1
-                <br />
-                3.Conectar cable serial a puerto serial s0/1 de cisco 1 con
-                puerto serial s0/0 de cisco 2
-              </p>
-            )}
           </div>
         </MDBCol>
 
         <MDBCol md='2'>
-          <Button  variant="primary" onClick={() => window.location.href = "./simulacionRipSegundaEtapa"}>
+          <Button  variant="danger" onClick={() => window.location.href = "./simulacionRipSegundaEtapa"}>
             Siguiente etapa
           </Button>
         </MDBCol>
@@ -140,7 +138,7 @@ function SimulacionRip() {
             <MDBCol className="d-flex align-items-center justify-content-center">
               <Button
                 variant="primary"
-                onClick={() => cambiarEstadoPrimeraEtapa(!estado_primera_etapa)}
+                onClick={() => cambiarEstadoPrimeraEtapa(!estado_primera_etapa, comandoCisco1PrimeraEtapa)}
               >
                 Mostrar Configuracion
               </Button>
@@ -162,7 +160,7 @@ function SimulacionRip() {
             <MDBCol className="d-flex align-items-center justify-content-center">
               <Button
                 variant="primary"
-                onClick={() => cambiarEstadoSegundaEtapa(!estado_segunda_etapa)}
+                onClick={() => cambiarEstadoPrimeraEtapa(!estado_primera_etapa, comandoCisco2PrimeraEtapa)}
               >
                 Mostrar Configuracion
               </Button>
@@ -184,7 +182,7 @@ function SimulacionRip() {
             <MDBCol className="d-flex align-items-center justify-content-center">
               <Button
                 variant="primary"
-                onClick={() => cambiarEstadoModal2(!estado_modal2)}
+                onClick={() => cambiarEstadoPrimeraEtapa(!estado_primera_etapa, comandoPCPrimeraEtapa)}
               >
                 Mostrar Configuracion
               </Button>
