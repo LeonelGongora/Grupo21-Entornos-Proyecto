@@ -6,7 +6,6 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 
 import HelpIcon from '@mui/icons-material/Help';
 
-
 const BootstrapTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} arrow classes={{ popper: className }} placement="top"/>
 ))(({ theme }) => ({
@@ -30,7 +29,6 @@ function ModalCisco2({estado1, cambiarEstado1}) {
     ["network", "192.168.1.0"],
   ]);
 
-
     const salirVentanaModal =  () => {
         cambiarEstado1(false);
     };
@@ -50,10 +48,7 @@ function ModalCisco2({estado1, cambiarEstado1}) {
     };
   
     const processCommand = (command) => {
-      //let comandos = [
-        //["router", "rip"],
-        //["network", "192.168.1.0"],
-      //];
+
       let comando_ingresado_separado = command.trim().split(" ");
 
       if (comandos[posicionComando].length !== comando_ingresado_separado.length) {

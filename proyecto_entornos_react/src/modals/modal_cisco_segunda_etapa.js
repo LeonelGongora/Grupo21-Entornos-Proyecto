@@ -148,9 +148,6 @@ function ModalCiscoSegundaEtapa({estado1, cambiarEstado1}) {
               style={{ overflowY: "scroll", height: "300px" }}
             >
               <div className="console">
-                {comandosSegundaEtapa.map((comando) => {
-                  return <></>;
-                })}
 
                 <Row className="mb-3">
                   <Row>
@@ -159,6 +156,10 @@ function ModalCiscoSegundaEtapa({estado1, cambiarEstado1}) {
                     </Col>
                   </Row>
                 </Row>
+
+                {comandosSegundaEtapa.map((comando) => {
+                  return <></>;
+                })}
 
                 <Row className="mb-3">
                   <Col xs={2} style={{ paddingRight: "0px" }}>
@@ -287,38 +288,14 @@ function ModalCiscoSegundaEtapa({estado1, cambiarEstado1}) {
                     </Col>
                   </Row>
                 </Row>
-
               </div>
             </Container>
             <Container>
-              <Row>
-                <Col sm={1} style={{ paddingRight: "0px" }}>
-                  Router
-                  <span>&gt; </span>
-                </Col>
-                <Col style={{ paddingLeft: "0px" }}>
-                  <Form onSubmit={handleCommandSubmit}>
-                    <Form.Group>
-                      <Form.Control
-                        type="text"
-                        placeholder="Ingrese su comando"
-                        onChange={handleInputChange}
-                        value={inputComando}
-                        id="Entrada de comandos1"
-                      />
-                    </Form.Group>
-                  </Form>
-                </Col>
-                <Col sm={2}>
+              <Row className='d-flex align-items-center justify-content-center'>
+                <Col sm={4} className='d-flex align-items-center justify-content-center'>
                   <Button variant="warning" onClick={handleCommandSubmit}>
                     Ingresar comandos
                   </Button>
-                </Col>
-
-                <Col sm={1}>
-                  <BootstrapTooltip title={mensaje}>
-                    <HelpIcon></HelpIcon>
-                  </BootstrapTooltip>
                 </Col>
               </Row>
             </Container>

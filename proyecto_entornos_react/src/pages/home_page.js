@@ -82,7 +82,7 @@ function HomePage() {
                 <MDBCardImage
                   src={imagen_cableado}
                   fluid
-                  style={{ width: "66%", height: "auto" }}
+                  style={{ width: "66%", height: "280px" }}
                 />
                 <a href="#!">
                   <div className="mask">
@@ -115,7 +115,7 @@ function HomePage() {
                 rippleTag="div"
                 className="bg-image rounded hover-zoom"
               >
-                <MDBCardImage src={protocolo_bgp} fluid className="w-100" />
+                <MDBCardImage src={protocolo_bgp} fluid className="w-100" style={{ width: "66%", height: "280px" }}/>
                 <a href="#!">
                   <div className="mask">
                     <div className="d-flex justify-content-start align-items-end h-100">

@@ -106,7 +106,7 @@ function ModalCiscoPrimeraEtapa({estado1, cambiarEstado1, comandosVariable}) {
             </div>
             <Container
               className="overflow-auto my-4"
-              style={{ overflowY: "scroll", height: "300px" }}
+              style={{ overflowY: "scroll", height: "380px" }}
             >
               <div className="console">
                 {comandosVariable.map((comando) => {
@@ -137,38 +137,6 @@ function ModalCiscoPrimeraEtapa({estado1, cambiarEstado1, comandosVariable}) {
 
                 <pre>{outputComando}</pre>
               </div>
-            </Container>
-            <Container>
-              <Row>
-                <Col sm={1} style={{ paddingRight: "0px" }}>
-                  Router
-                  <span>&gt; </span>
-                </Col>
-                <Col style={{ paddingLeft: "0px" }}>
-                  <Form onSubmit={handleCommandSubmit}>
-                    <Form.Group>
-                      <Form.Control
-                        type="text"
-                        placeholder="Ingrese su comando"
-                        onChange={handleInputChange}
-                        value={inputComando}
-                        id="Entrada de comandos1"
-                      />
-                    </Form.Group>
-                  </Form>
-                </Col>
-                <Col sm={2}>
-                  <Button variant="warning" onClick={handleCommandSubmit}>
-                    Ingresar
-                  </Button>
-                </Col>
-
-                <Col sm={1}>
-                  <BootstrapTooltip title={mensaje}>
-                    <HelpIcon></HelpIcon>
-                  </BootstrapTooltip>
-                </Col>
-              </Row>
             </Container>
           </div>
         </div>
