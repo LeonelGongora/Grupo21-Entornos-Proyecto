@@ -18,17 +18,34 @@ import {
 import BarraSuperior from '../components/BarraSuperior';
 
 import imagen_cisco from '../images/imagen_router_cisco.jpg'
-function SimulacionRipTerceraEtapa() {
+
+function SimulacionBGP() {
 
     const [values, setValues] = useState({
         estado_modal_1 : false
     });
 
     const [estado_modal2, setEstadoModal2] = useState(false);
+    const [estado_primera_etapa, setPrimeraEtapa] = useState(false);
+    const [estado_segunda_etapa, setSegundaEtapa] = useState(false);
     const [mostrarInstrucciones, setMostrarInstrucciones] = useState(false);
+
+    const cambiarEstadoModal1 = (nuevoEstado) => {
+        setValues({
+            estado_modal_1:nuevoEstado,
+        });
+    };
 
     const cambiarEstadoModal2 = (nuevoEstado) => {
       setEstadoModal2(nuevoEstado)
+    };
+
+    const cambiarEstadoPrimeraEtapa = (nuevoEstado) => {
+      setPrimeraEtapa(nuevoEstado)
+    };
+
+    const cambiarEstadoSegundaEtapa = (nuevoEstado) => {
+      setSegundaEtapa(nuevoEstado)
     };
 
     const generarDesafio = () => {
@@ -44,41 +61,67 @@ function SimulacionRipTerceraEtapa() {
 
   return (
     <>
+      <ModalCisco1
+        estado1={values.estado_modal_1}
+        cambiarEstado1={cambiarEstadoModal1}
+      />
+
       <ModalCisco2
         estado1={estado_modal2}
         cambiarEstado1={cambiarEstadoModal2}
       />
 
-      <BarraSuperior titulo="Simulacion de Protocolo RIP" />
+      <ModalCiscoPrimeraEtapa
+        estado1={estado_primera_etapa}
+        cambiarEstado1={cambiarEstadoPrimeraEtapa}
+      />
+
+      <ModalCiscoSegundaEtapa
+        estado1={estado_segunda_etapa}
+        cambiarEstado1={cambiarEstadoSegundaEtapa}
+      />
+
+      <BarraSuperior titulo="Simulacion de Protocolo BGP" />
 
       <MDBRow className="my-3">
         <MDBCol className="d-flex align-items-center justify-content-center">
-          <h2>Tercera Etapa</h2>
+          <h2>Primera Etapa</h2>
         </MDBCol>
       </MDBRow>
 
       <MDBRow>
-        <MDBCol md="10">
+        <MDBCol md='10'>
           <div className="d-flex justify-content-between align-items-center mb-5">
-            <p style={{ marginLeft: "10px" }}>
-              Instrucciones:
-              <br />
-              1. Entrar a la configuracion de los dispositivos
-              <br />
-              2. Leer las instrucciones y explicaciones de los comandos
-              utilizados
-              <br />
-              3. Pase a la siguiente etapa
-            </p>
+            {mostrarInstrucciones ? (
+              <p style={{ marginLeft: "10px" }}>
+                Instrucciones:
+                <br />
+                1. Seleccionar el cable
+                <br />
+                2. Seleccionar el dispositivo donde conectar el cable
+                <br />
+                3. Elegir el puerto a conectar de inicio y puerto final
+              </p>
+            ) : (
+              <p style={{ marginLeft: "10px" }}>
+                Desafio:
+                <br />
+                1.Conectar cable consola a router cisco 1 a puerto consola del
+                router cisco
+                <br />
+                2.Conectar cable ethernet a puerto ethernet 1 de PC con router
+                cisco 1 a puerto g0/1
+                <br />
+                3.Conectar cable serial a puerto serial s0/1 de cisco 1 con
+                puerto serial s0/0 de cisco 2
+              </p>
+            )}
           </div>
         </MDBCol>
 
-        <MDBCol md="2">
-          <Button
-            variant="danger"
-            onClick={() => (window.location.href = "./")}
-          >
-            Terminar simulacion
+        <MDBCol md='2'>
+          <Button  variant="primary" onClick={() => window.location.href = "./simulacionRipSegundaEtapa"}>
+            Siguiente etapa
           </Button>
         </MDBCol>
       </MDBRow>
@@ -98,7 +141,7 @@ function SimulacionRipTerceraEtapa() {
             <MDBCol className="d-flex align-items-center justify-content-center">
               <Button
                 variant="primary"
-                onClick={() => cambiarEstadoModal2(!estado_modal2)}
+                onClick={() => cambiarEstadoPrimeraEtapa(!estado_primera_etapa)}
               >
                 Mostrar Configuracion
               </Button>
@@ -120,7 +163,7 @@ function SimulacionRipTerceraEtapa() {
             <MDBCol className="d-flex align-items-center justify-content-center">
               <Button
                 variant="primary"
-                onClick={() => cambiarEstadoModal2(!estado_modal2)}
+                onClick={() => cambiarEstadoSegundaEtapa(!estado_segunda_etapa)}
               >
                 Mostrar Configuracion
               </Button>
@@ -154,4 +197,4 @@ function SimulacionRipTerceraEtapa() {
   );
 }
 
-export default SimulacionRipTerceraEtapa;
+export default SimulacionBGP;

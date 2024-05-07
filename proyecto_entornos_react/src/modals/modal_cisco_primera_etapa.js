@@ -16,7 +16,7 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
   },
 }));
 
-function ModalCiscoPrimeraEtapa({estado1, cambiarEstado1}) {
+function ModalCiscoPrimeraEtapa({estado1, cambiarEstado1, comandosVariable}) {
 
   const [inputComando, setInputComandos] = useState('');
   const [outputComando, setOutputComando] = useState('');
@@ -109,7 +109,7 @@ function ModalCiscoPrimeraEtapa({estado1, cambiarEstado1}) {
               style={{ overflowY: "scroll", height: "300px" }}
             >
               <div className="console">
-                {comandoPrimeraEtapa.map((comando) => {
+                {comandosVariable.map((comando) => {
                   return (
                     <>
                       <Row className="mb-3">
