@@ -7,11 +7,13 @@ import imagen_cable_consola from '../images/imagen_cable_consola.jpg';
 import CanvasComponent from '../components/CanvasComponent';
 import Button from 'react-bootstrap/Button';
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 
 function Simulacion_cableado(props) {
 
   const [mostrarInstrucciones, setMostrarInstrucciones] = useState(true);
   const [textoBoton, setTextoBoton] = useState('Iniciar Simulación');
+  const [lineColor, setLineColor] = useState('white'); // Estado para almacenar el color de las líneas
 
   const cambiarTextoBoton = () => {
     setTextoBoton(textoBoton === 'Iniciar Simulación' ? 'Volver a mostrar instrucciones' : 'Iniciar Simulación');
@@ -27,15 +29,18 @@ function Simulacion_cableado(props) {
   };
 
     const handleClickSerial = () => {
-        alert('Seleccionado cable serial');
+        Swal.fire('Cable serial seleccionado','','warning');
+        setLineColor('red'); // Establecer el color de las líneas
       };
     
     const handleClickEthernet = () => {
-        alert('Seleccionado cable ethernet');
+        Swal.fire('Cable ethernet seleccionado','','warning');
+        setLineColor('green'); // Establecer el color de las líneas
     };
 
     const handleClickConsola = () => {
-        alert('Seleccionado cable consola');
+        Swal.fire('Cable consola seleccionado','','warning');
+        setLineColor('blue'); // Establecer el color de las líneas
     };
 
     const RegresarHomePage = () => {
@@ -72,11 +77,11 @@ function Simulacion_cableado(props) {
       </div>
 
       
-      <CanvasComponent/>
+      <CanvasComponent lineColor={lineColor}/>
     
-      <BotonTipoCable onClick={handleClickSerial} left={30} transform={-100} imagenSrc={imagen_cable_serial}></BotonTipoCable>
-      <BotonTipoCable onClick={handleClickEthernet} left={50} transform={-100} imagenSrc={imagen_cable_ethernet}></BotonTipoCable>
-      <BotonTipoCable onClick={handleClickConsola} left={70} transform={-100} imagenSrc={imagen_cable_consola}></BotonTipoCable>
+      <BotonTipoCable onClick={handleClickSerial} left={30} transform={-100} imagenSrc={imagen_cable_serial} color={'red'} borderColor="red"></BotonTipoCable>
+      <BotonTipoCable onClick={handleClickEthernet} left={50} transform={-100} imagenSrc={imagen_cable_ethernet} color = {'green'} borderColor="green"></BotonTipoCable>
+      <BotonTipoCable onClick={handleClickConsola} left={70} transform={-100} imagenSrc={imagen_cable_consola} color = {'blue'} borderColor="blue"></BotonTipoCable>
      
     </div>  
   );
