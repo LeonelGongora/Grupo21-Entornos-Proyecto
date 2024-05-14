@@ -18,11 +18,13 @@ function SimulacionRip() {
     generarDesafio()
   }, []);
 
+  let primera_red = ""
+
   const [showModal, setShowModal] = useState(false);
     const [lineColor, setLineColor] = useState('white');
     const [estado_primera_etapa, setPrimeraEtapa] = useState(false);
     const [siguienteEtapa, setSiguienteEtapa] = useState(true);
-    const [mostrarInstrucciones, setMostrarInstrucciones] = useState(false);
+    const [redes, setRedes] = useState([]);
 
     const cambiarEstadoPrimeraEtapa = (nuevoEstado, comandos) => {
       setComandoVariable(comandos)
@@ -33,8 +35,8 @@ function SimulacionRip() {
       {comando: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado", pista: 'Esto es una ayuda'},
       {comando: "configure terminal", explicacion: "El comando configure terminal se utiliza para acceder al modo de configuración global en dispositivos Cisco"},
       {comando: "version 2", explicacion: "Este comando se utiliza dentro del modo de configuración de RIP en Cisco Packet Tracer para especificar que el enrutador debe utilizar la versión 2 del protocolo RIP en lugar de la versión original (RIP v1)"},
-      {comando: "network 192.168.1.0", explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.1.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
-      {comando: "network 192.168.2.0", explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.2.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
+      {comando: "network 192.168.1.0" , explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.1.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
+      {comando: "network 192.168.1.0", explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.2.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
       {comando: "exit", explicacion: "Se utilizar para salir del modo configuracion y volver al modo priviligeado."}
     ]);
 
@@ -63,7 +65,18 @@ function SimulacionRip() {
 
       let network = primerNumero +"."+segundoNumero+"."+tercerNumero+"."+cuartoNumero
 
-      console.log(network)
+      let redes_alt = []
+      redes_alt.push(network)
+
+      let primerNumero1 = generarPrimerNumero().toString()
+      let segundoNumero1 = generarOtrosNumeros().toString()
+      let tercerNumero1 = generarOtrosNumeros().toString()
+      let cuartoNumero1 = generarOtrosNumeros().toString()
+
+      let network1 = primerNumero1 +"."+segundoNumero1+"."+tercerNumero1+"."+cuartoNumero1
+      redes_alt.push(network1)
+      setRedes(redes_alt)
+
     };
 
     const generarPrimerNumero = () => {
@@ -113,6 +126,7 @@ function SimulacionRip() {
         estado1={estado_primera_etapa}
         cambiarEstado1={cambiarEstadoPrimeraEtapa}
         comandosVariable = {comandoVariable}
+        redes = {redes}
       />
 
       <Modal show={showModal} onHide={cerrarModal}>
@@ -122,13 +136,9 @@ function SimulacionRip() {
         <Modal.Body>
         {comandoPCPrimeraEtapa.map((comando) => {
                   return <>
-                  
-                  </>;
-                })}
-
-          <div className="mb-3">
+                  <div className="mb-3">
             <label htmlFor="nombre" className="form-label">
-              Direccion IP:
+            {comando.nombre}:
             </label>
             <input
               type="text"
@@ -137,6 +147,10 @@ function SimulacionRip() {
               className="form-control"
             />
           </div>
+                  
+                  </>;
+                })}
+          
           <div className="mb-3">
             <label htmlFor="imagen" className="form-label">
               Mascara de subred:
