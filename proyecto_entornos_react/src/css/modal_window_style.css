@@ -146,13 +146,6 @@
 .reqCheckbox{
     margin-right: 1vw;
 }
-label{
-    display: flex;
-    border: 1px solid;
-    padding: 1vh;
-    border-color: black;
-    margin: 3px;
-}
 
 .inputEvento{
     border: 1px solid rgb(175, 175, 175);

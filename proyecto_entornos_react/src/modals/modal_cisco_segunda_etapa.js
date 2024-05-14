@@ -69,13 +69,13 @@ function ModalCiscoSegundaEtapa({estado1, cambiarEstado1}) {
 
       if (!values.segundo.trim()) {
         validationErrors.segundo = "Este campo es obligatorio";
-      }else if(values.segundo !== "2"){
+      }else if(values.segundo !== "version"){
         validationErrors.segundo = "Comando incorrecto";
       }
 
       if (!values.tercero.trim()) {
         validationErrors.tercero = "Este campo es obligatorio";
-      }else if(values.tercero !== "2"){
+      }else if(values.tercero !== "version"){
         validationErrors.tercero = "Comando incorrecto";
       }
 
