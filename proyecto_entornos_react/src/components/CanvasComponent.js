@@ -21,7 +21,7 @@ function CanvasComponent({ lineColor }) {
     { nombreEntrada: 'Consola', src: entradaConsolaCisco1, x: 150, y: 550, action: 'entradaConsolaCisco1' },
     { nombreEntrada: 'USB', src: entradaUsbPC, x: 630, y: 50, action: 'entradaUsbPC'  },
     { nombreEntrada: 'Serial 1', src: entradaSerialCisco2, x: 1150, y: 50, action: 'entradaSerialCisco2'  },
-    { nombreEntrada: 'Serial 1', src: entradaSerialCisco21, x: 1150, y: 175, action: 'entradaSerialCisco21'  },
+    { nombreEntrada: 'Serial 2', src: entradaSerialCisco21, x: 1150, y: 175, action: 'entradaSerialCisco21'  },
     { nombreEntrada: 'Ethernet 1', src: entradaEthernetCisco2, x: 1150, y: 300, action: 'entradaEthernetCisco2'  },
     { nombreEntrada: 'Ethernet 2',src: entradaEthernetCisco21, x: 1150, y: 425, action: 'entradaEthernetCisco21'  },
     { nombreEntrada: 'Consola', src: entradaConsolaCisco2, x: 1150, y: 550, action: 'entradaConsolaCisco2'  }

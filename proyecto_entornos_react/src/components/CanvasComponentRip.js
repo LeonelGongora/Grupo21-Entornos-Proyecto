@@ -25,11 +25,18 @@ function CanvasComponentRip({ lineColor }) {
     { nombreEntrada: 'Consola', src: entradaConsolaCisco1, x: 150, y: 550, action: 'entradaConsolaCisco1' },
     { nombreEntrada: 'USB', src: entradaUsbPC, x: 630, y: 50, action: 'entradaUsbPC'  },
     { nombreEntrada: 'Serial 1', src: entradaSerialCisco2, x: 1150, y: 50, action: 'entradaSerialCisco2'  },
-    { nombreEntrada: 'Serial 1', src: entradaSerialCisco21, x: 1150, y: 175, action: 'entradaSerialCisco21'  },
+    { nombreEntrada: 'Serial 2', src: entradaSerialCisco21, x: 1150, y: 175, action: 'entradaSerialCisco21'  },
     { nombreEntrada: 'Ethernet 1', src: entradaEthernetCisco2, x: 1150, y: 300, action: 'entradaEthernetCisco2'  },
     { nombreEntrada: 'Ethernet 2',src: entradaEthernetCisco21, x: 1150, y: 425, action: 'entradaEthernetCisco21'  },
     { nombreEntrada: 'Consola', src: entradaConsolaCisco2, x: 1150, y: 550, action: 'entradaConsolaCisco2'  }
   ];
+
+  const lineasADibujar = [{x1:150,y1:50,x2:1150,y2:50,colorLinea:'red'},
+                          {x1:150,y1:175,x2:1150,y2:175,colorLinea:'red'},
+                          {x1:150,y1:300,x2:1150,y2:300,colorLinea:'green'},
+                          {x1:150,y1:425,x2:1150,y2:425,colorLinea:'green'},
+                          {x1:150,y1:550,x2:630,y2:50,colorLinea:'blue'}];
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -61,6 +68,7 @@ function CanvasComponentRip({ lineColor }) {
     canvas.addEventListener('click', handleClick);
 
     return () => {
+      //canvas.removeEventListener('click', handleClick);
       canvas.removeEventListener('click', handleClick);
     };
   }, [images]);
@@ -71,7 +79,7 @@ function CanvasComponentRip({ lineColor }) {
 
   const canvasRef = useRef(null);
   const [firstClickedImage, setFirstClickedImage] = useState(null); // Estado para almacenar la primera imagen pulsada
-
+  
   function handleClick(event) {
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
@@ -167,7 +175,7 @@ function CanvasComponentRip({ lineColor }) {
       
       ctx.lineWidth = 5; // Grosor de las líneas
       
-      clickedImages.forEach(line => {
+      lineasADibujar.forEach(line => {
         ctx.strokeStyle = line.colorLinea; // Color de las líneas
         ctx.beginPath();
         ctx.moveTo(line.x1+40, line.y1+40); // Punto inicial de la línea
@@ -178,8 +186,8 @@ function CanvasComponentRip({ lineColor }) {
 
     // Llamar a la función drawLines al montar el componente y cada vez que linesData cambie
     drawLines();
-    console.log('imagenes clickeadas',clickedImages);
-  }, [clickedImages]);
+    console.log('imagenes clickeadas',lineasADibujar);
+  }, [lineasADibujar]);
 
   return (
     <MDBRow className="d-flex align-items-center justify-content-center">

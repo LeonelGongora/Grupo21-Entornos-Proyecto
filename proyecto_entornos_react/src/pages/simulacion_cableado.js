@@ -47,7 +47,122 @@ function Simulacion_cableado(props) {
       window.location.href = "./home_page";
   };
 
+  const desafioSerialesEnLinea = [{opcion1: 'Conectar Serial 1 de Cisco 1 a Serial 1 de Cisco 2'},
+                                  {opcion2: 'Conectar Serial 2 de Cisco 1 a Serial 2 de Cisco 2'}];
 
+  const desafioSerialesEnCruz = [{opcion1: 'Conectar Serial 1 de Cisco 1 a Serial 2 de Cisco 2'},
+                                 {opcion2: 'Conectar Serial 2 de Cisco 1 a Serial 1 de Cisco 2'}];
+
+  const desafioEthernetsEnLinea = [{opcion1: 'Conectar Ethernet 1 de Cisco 1 a Ethernet 1 de Cisco 2'},
+                                   {opcion2: 'Conectar Ethernet 2 de Cisco 1 a Ethernet 2 de Cisco 2'}];
+  
+  const desafioEthernetsEnCruz = [{opcion1: 'Conectar Ethernet 1 de Cisco 1 a Ethernet 2 de Cisco 2'},
+                                  {opcion2: 'Conectar Ethernet 2 de Cisco 1 a Ethernet 1 de Cisco 2'}];
+  
+  const desafioConsola = [{opcion1: 'Conectar Consola 1 de Cisco 1 a USB de PC'},
+                          {opcion2: 'Conectar Consola 2 de Cisco 2 a USB de PC'}];
+  
+  const generarDesafioAleatorioSeriales = () => {
+    const numeroDeEscogidos = Math.floor(Math.random() * 2); // Esto generará 0 o 1
+    let opcionAleatoriaSerial = null;
+    let opcionSerial1;
+    let opcionSerial2;
+
+    console.log(numeroDeEscogidos);
+    if(numeroDeEscogidos === 0){
+        // Si randomIndex es 0, escoge la opción1; si es 1, escoge la opción2
+        const randomSerial = Math.floor(Math.random() * 2);
+        const randomIndex = Math.floor(Math.random() * 2);
+        console.log(randomSerial);
+        console.log(randomIndex);
+        if(randomSerial === 0){
+           opcionAleatoriaSerial = randomIndex === 0 ? desafioSerialesEnLinea[0].opcion1 : desafioSerialesEnLinea[1].opcion2;
+        }
+        else{
+           opcionAleatoriaSerial = randomIndex === 0 ? desafioSerialesEnCruz[0].opcion1 : desafioSerialesEnCruz[1].opcion2;
+        }
+    }
+    else{
+      const randomSerial = Math.floor(Math.random() * 2);
+      if(randomSerial === 0){
+          opcionSerial1 = desafioSerialesEnLinea[0].opcion1;
+          opcionSerial2 = desafioSerialesEnLinea[1].opcion2;
+      }
+      else{
+        opcionSerial1 = desafioSerialesEnCruz[0].opcion1
+        opcionSerial2 = desafioSerialesEnCruz[1].opcion2;
+      }
+    }
+    console.log(opcionSerial1);
+    console.log(opcionSerial2);
+
+    if(opcionAleatoriaSerial === null){
+      return (
+        <>
+            {opcionSerial1}
+          <br />
+            {opcionSerial2}
+        </>
+      ); 
+    }
+    else{
+      return opcionAleatoriaSerial;
+    }
+};
+
+const generarDesafioAleatorioEthernets = () => {
+  const numeroDeEscogidos = Math.floor(Math.random() * 2); // Esto generará 0 o 1
+  let opcionAleatoriaEthernet = null;
+  let opcionEthernet1;
+  let opcionEthernet2;
+
+  console.log(numeroDeEscogidos);
+  if(numeroDeEscogidos === 0){
+      // Si randomIndex es 0, escoge la opción1; si es 1, escoge la opción2
+      const randomEthernet = Math.floor(Math.random() * 2);
+      const randomIndex = Math.floor(Math.random() * 2);
+      console.log(randomEthernet);
+      console.log(randomIndex);
+      if(randomEthernet === 0){
+         opcionAleatoriaEthernet = randomIndex === 0 ? desafioEthernetsEnLinea[0].opcion1 : desafioEthernetsEnLinea[1].opcion2;
+      }
+      else{
+         opcionAleatoriaEthernet = randomIndex === 0 ? desafioEthernetsEnCruz[0].opcion1 : desafioEthernetsEnCruz[1].opcion2;
+      }
+  }
+  else{
+    const randomEthernet = Math.floor(Math.random() * 2);
+    if(randomEthernet === 0){
+        opcionEthernet1 = desafioEthernetsEnLinea[0].opcion1;
+        opcionEthernet2 = desafioEthernetsEnLinea[1].opcion2;
+    }
+    else{
+      opcionEthernet1 = desafioEthernetsEnCruz[0].opcion1
+      opcionEthernet2 = desafioEthernetsEnCruz[1].opcion2;
+    }
+  }
+  console.log(opcionEthernet1);
+  console.log(opcionEthernet2);
+
+  if(opcionAleatoriaEthernet === null){
+    return (
+      <>
+          {opcionEthernet1}
+        <br />
+          {opcionEthernet2}
+      </>
+    ); 
+  }
+  else{
+    return opcionAleatoriaEthernet;
+  }
+};
+
+const generarDesafioConsola = () => {
+   const randomIndex = Math.floor(Math.random() * 2);
+   return randomIndex === 0 ? desafioConsola[0].opcion1 : desafioConsola[1].opcion2;
+};
+  
   return (
     <div>
       <BarraSuperior titulo="Simulador de Cableado" />
@@ -61,9 +176,12 @@ function Simulacion_cableado(props) {
           </p>
         ) : (
           <p style={{marginLeft: '10px'}}>Desafio:<br />
-                       1.Conectar cable consola a router cisco 1 a puerto consola del router cisco<br />
-                       2.Conectar cable ethernet a puerto ethernet 1 de PC con router cisco 1 a puerto g0/1<br />
-                       3.Conectar cable serial a puerto serial s0/1 de cisco 1 con puerto serial s0/0 de cisco 2</p>
+                {generarDesafioAleatorioSeriales()}
+                <br/>
+                {generarDesafioAleatorioEthernets()}
+                <br/>
+                {generarDesafioConsola()}
+           </p>
         )}
         <Button color="primary" onClick={DirigirCableadoActivo}>
           {textoBoton}
