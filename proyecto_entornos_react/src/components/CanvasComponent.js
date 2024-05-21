@@ -12,7 +12,7 @@ import entradaSerialCisco2 from '../images/entradaSerial.png';
 import entradaSerialCisco21 from '../images/entradaSerial.png';
 import Swal from 'sweetalert2';
 
-function CanvasComponent({ lineColor }) {
+function CanvasComponent({ lineColor,parrafo,botonVerificar,botonGenerar}) {
   const images = [
     { nombreEntrada: 'Serial 1', src: entradaSerialCisco1, x: 150, y: 50, action: 'entradaSerialCisco1'  },
     { nombreEntrada: 'Serial 2', src: entradaSerialCisco11, x: 150, y: 175, action: 'entradaSerialCisco11'  },
@@ -26,6 +26,59 @@ function CanvasComponent({ lineColor }) {
     { nombreEntrada: 'Ethernet 2',src: entradaEthernetCisco21, x: 1150, y: 425, action: 'entradaEthernetCisco21'  },
     { nombreEntrada: 'Consola', src: entradaConsolaCisco2, x: 1150, y: 550, action: 'entradaConsolaCisco2'  }
   ];
+
+  useEffect(() => {
+    if(botonGenerar === true){
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d');
+      setClickedImages([]);
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas antes de dibujar nuevas líneas
+    }
+  },[botonGenerar])
+
+  useEffect(() => {
+    if (botonVerificar === true) {
+      let sumaIguales = 0;
+      let sumaNoExisten = 0;
+      clickedImages.forEach(elementos => {
+          let actual = {action1: elementos.action1, action2: elementos.action2};
+          const existe = parrafo.some(par => {
+            return (par.action1 === actual.action1 && par.action2 === actual.action2) || 
+                  (par.action2 === actual.action1 && par.action1 === actual.action2);
+          });
+          if(existe === true){
+            sumaIguales = sumaIguales + 1;
+          }
+          else{
+            sumaNoExisten = sumaNoExisten + 1;
+          }
+      });
+      if(sumaIguales === parrafo.length && sumaNoExisten === 0){
+        Swal.fire({
+          title: 'La conexion es correcta, felicidades!!!',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        });
+      }
+      else{
+        Swal.fire({
+          title: 'Fallaste, vuelve a intentarlo',
+          icon: 'error',
+          confirmButtonText: 'Aceptar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        });
+      }
+      console.log('El botón verificar ha sido pulsado');
+    }
+  },[botonVerificar]);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -61,7 +114,6 @@ function CanvasComponent({ lineColor }) {
     };
   }, [images]);
   
-
   const [clickedImages, setClickedImages] = useState([]); 
 
 
