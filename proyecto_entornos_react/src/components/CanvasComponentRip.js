@@ -186,7 +186,6 @@ function CanvasComponentRip({ lineColor }) {
 
     // Llamar a la función drawLines al montar el componente y cada vez que linesData cambie
     drawLines();
-    console.log('imagenes clickeadas',lineasADibujar);
   }, [lineasADibujar]);
 
   return (

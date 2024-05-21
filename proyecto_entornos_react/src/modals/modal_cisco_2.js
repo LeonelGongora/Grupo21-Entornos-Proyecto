@@ -5,6 +5,9 @@ import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 
 import HelpIcon from '@mui/icons-material/Help';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 const BootstrapTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} arrow classes={{ popper: className }} placement="top"/>
@@ -19,15 +22,25 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
 
 function ModalCisco2({estado1, cambiarEstado1}) {
 
+  const primera_red = cookies.get('primera_red');
+  const segunda_red = cookies.get('segunda_red');
+
   const [inputComando, setInputComandos] = useState('');
   const [outputComando, setOutputComando] = useState('');
   const [comandoCorrecto, setComandoCorrecto] = useState(false);
   const [posicionComando, setPosicionComando] = useState(0);
   const [mensaje, setMensaje] = useState('');
   const [comandos, setComandos] = useState([
+    ["enable"],
     ["router", "rip"],
-    ["network", "192.168.1.0"],
+    ["network", "primera_red"],
+    ["network", "segunda_red"],
   ]);
+
+  useEffect(()=>{
+    configurarComandos()
+    //generarDesafio()
+  }, []);
 
     const salirVentanaModal =  () => {
         cambiarEstado1(false);
@@ -83,6 +96,25 @@ function ModalCisco2({estado1, cambiarEstado1}) {
         }
       }
     }
+
+    const configurarComandos = () => {
+      actualizarComando("primera_red", primera_red);
+      actualizarComando("segunda_red", segunda_red);
+    };
+
+    const actualizarComando = (valorAnterior, nuevoValor) => {
+      setComandos((prevState) => {
+        // Creamos una nueva copia del array comandos
+        const nuevoEstado = prevState.map((comandoArray) => {
+          // Creamos una nueva copia del array interno si contiene el valorAnterior
+          if (comandoArray.includes(valorAnterior)) {
+            return comandoArray.map((item) => (item === valorAnterior ? nuevoValor : item));
+          }
+          return comandoArray; // Retornamos el array interno sin cambios si no contiene valorAnterior
+        });
+        return nuevoEstado;
+      });
+    };
 
     return (
       estado1 && (

@@ -11,20 +11,21 @@ import {
 } from 'mdb-react-ui-kit';
 import BarraSuperior from '../components/BarraSuperior';
 import { Modal } from 'react-bootstrap';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 function SimulacionRip() {
 
   useEffect(()=>{
     generarDesafio()
+    generarMascara()
   }, []);
 
-  let primera_red = ""
-
   const [showModal, setShowModal] = useState(false);
+  const [siguienteEtapa, setSiguienteEtapa] = useState(true);
     const [lineColor, setLineColor] = useState('white');
     const [estado_primera_etapa, setPrimeraEtapa] = useState(false);
-    const [siguienteEtapa, setSiguienteEtapa] = useState(true);
-    const [redes, setRedes] = useState([]);
 
     const cambiarEstadoPrimeraEtapa = (nuevoEstado, comandos) => {
       setComandoVariable(comandos)
@@ -34,48 +35,90 @@ function SimulacionRip() {
     const [comandoCisco1PrimeraEtapa, setComandoCisco1PrimeraEtapa] = useState([
       {comando: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado", pista: 'Esto es una ayuda'},
       {comando: "configure terminal", explicacion: "El comando configure terminal se utiliza para acceder al modo de configuración global en dispositivos Cisco"},
+      {comando: "router rip", explicacion: "Este comando se utiliza dentro del modo de configuración de RIP en Cisco Packet Tracer para especificar que el enrutador debe utilizar la versión 2 del protocolo RIP en lugar de la versión original (RIP v1)"},
       {comando: "version 2", explicacion: "Este comando se utiliza dentro del modo de configuración de RIP en Cisco Packet Tracer para especificar que el enrutador debe utilizar la versión 2 del protocolo RIP en lugar de la versión original (RIP v1)"},
-      {comando: "network 192.168.1.0" , explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.1.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
-      {comando: "network 192.168.1.0", explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.2.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
+      {comando: "" , explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.1.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
+      {comando: "", explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.2.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
       {comando: "exit", explicacion: "Se utilizar para salir del modo configuracion y volver al modo priviligeado."}
     ]);
 
     const [comandoCisco2PrimeraEtapa, setComandoCisco2PrimeraEtapa] = useState([
       {comando: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado", pista: 'Esto es una ayuda'},
       {comando: "configure terminal", explicacion: "El comando configure terminal se utiliza para acceder al modo de configuración global en dispositivos Cisco"},
-      {comando: "version 3", explicacion: "Este comando se utiliza dentro del modo de configuración de RIP en Cisco Packet Tracer para especificar que el enrutador debe utilizar la versión 2 del protocolo RIP en lugar de la versión original (RIP v1)"},
+      {comando: "version 2", explicacion: "Este comando se utiliza dentro del modo de configuración de RIP en Cisco Packet Tracer para especificar que el enrutador debe utilizar la versión 2 del protocolo RIP en lugar de la versión original (RIP v1)"},
       {comando: "network 192.168.1.0", explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.1.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
       {comando: "network 192.168.2.0", explicacion: "Cuando se ejecuta este comando se esta diciendo al enrutador que busque interfaces con direcciones IP que pertenezcan a la subred 192.168.2.0 y las incluya en el proceso de enrutamiento RIP, es decir, que las incluya en la tabla de enrutamiento del router."},
       {comando: "exit", explicacion: "Se utilizar para salir del modo configuracion y volver al modo priviligeado."}
     ]);
 
     const [comandoPCPrimeraEtapa, setComandoPCPrimeraEtapa] = useState([
-      {nombre: "Direccion IP", direccion_ip: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado"},
-      {nombre: "Mascara de subred", mascara: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado"},
-      {nombre: "Puerta de enlace predeterminada", puerta_enlace: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado"},
+      {nombre: "Direccion IP", valor: "192.168.1.0", explicacion: "Se asigna la Ip al puerto Ethernet de la computadora"},
+      {nombre: "Mascara de subred", valor: "255.255.255.224", explicacion: "Se asigna la mascara de red de la computadora"},
+      {nombre: "Puerta de enlace predeterminada", valor: "192.168.1.1", explicacion: "Se asigna la direccion ip del router mas cercano"}
     ]);
+
+    const [mascaras, setMascaras] = useState({
+      24 : "0",
+      25 : "128",
+      26: "192",
+      27 : "224",
+      28 : "240",
+      29: "248",
+      30: "252",
+    });
+
+    const [mascara, setMascara] = useState("");
 
     const [comandoVariable, setComandoVariable] = useState([]);
 
+    const [values, setValues] = useState({
+      direccion_ip : "",
+      mascara : "",
+      puerta_enlace: "",
+    });
+
     const generarDesafio = () => {
+
+      
+      let primera_red = generarRed()
+      actualizarComando(primera_red, 4)
+
+      let segunda_red = generarSegundaRed(primera_red, 2)
+      actualizarComando(segunda_red, 5)
+
+
+      let puerta_enlace = generarSegundaRed(primera_red, 3)
+
+      let direccion_pc = generarSegundaRed(puerta_enlace, 3)
+
+      actualizarComandosPC(puerta_enlace, 2)
+      actualizarComandosPC(direccion_pc, 0)
+
+      cookies.set("primera_red", primera_red, { path: "/" });
+      cookies.set("segunda_red", segunda_red, { path: "/" });
+      cookies.set("direccion_pc", direccion_pc, { path: "/" });
+      cookies.set("puerta_enlace", puerta_enlace, { path: "/" });
+    };
+
+    const generarRed = () => {
+
       let primerNumero = generarPrimerNumero().toString()
       let segundoNumero = generarOtrosNumeros().toString()
       let tercerNumero = generarOtrosNumeros().toString()
-      let cuartoNumero = generarOtrosNumeros().toString()
+      let cuartoNumero = '0'
 
       let network = primerNumero +"."+segundoNumero+"."+tercerNumero+"."+cuartoNumero
+      return network
+    };
 
-      let redes_alt = []
-      redes_alt.push(network)
+    const generarSegundaRed = (red_generada, indice) => {
 
-      let primerNumero1 = generarPrimerNumero().toString()
-      let segundoNumero1 = generarOtrosNumeros().toString()
-      let tercerNumero1 = generarOtrosNumeros().toString()
-      let cuartoNumero1 = generarOtrosNumeros().toString()
+      let red_separada = red_generada.split(".")
+      let segundo_numero = parseInt(red_separada[indice]) + 1
+      red_separada[indice] = segundo_numero.toString()
 
-      let network1 = primerNumero1 +"."+segundoNumero1+"."+tercerNumero1+"."+cuartoNumero1
-      redes_alt.push(network1)
-      setRedes(redes_alt)
+      let segunda_red = red_separada[0] +"."+red_separada[1]+"."+red_separada[2]+"."+red_separada[3]
+      return segunda_red
 
     };
 
@@ -103,10 +146,6 @@ function SimulacionRip() {
       setShowModal(false); // Cerrar la ventana emergente
     };
 
-    const handleSubmit =  (e) => {
-
-    };
-
     const abrirModalPC = () => {
       setShowModal(true);
     };
@@ -117,7 +156,43 @@ function SimulacionRip() {
       }else{
         
       }
-      
+    };
+
+    const actualizarComandosPC = (nuevoComando, indice) => {
+      setComandoPCPrimeraEtapa((prevState) => {
+        const nuevoEstado = prevState.map((item, index) => {
+          if (index === indice) { 
+            return { ...item, valor: nuevoComando };
+          }
+          return item;
+        });
+        return nuevoEstado;
+      });
+    };
+
+    const actualizarComando = (nuevoComando, indice) => {
+      setComandoCisco1PrimeraEtapa((prevState) => {
+        // Creamos una nueva copia del objeto en el array con el comando actualizado
+        const nuevoEstado = prevState.map((item, index) => {
+          if (index === indice) { // Suponiendo que solo hay un objeto o queremos cambiar el primer objeto
+            return { ...item, comando: "network " + nuevoComando };
+          }
+          return item;
+        });
+        return nuevoEstado;
+      });
+    };
+
+    const generarMascara = () => {
+      let max = 24;
+      let min = 30;
+
+      var numeroAleatorio = Math.random();
+      var primerNumero = Math.floor(numeroAleatorio * (max - min + 1)) + min;
+
+      let mascara = "255.255.255." + mascaras[primerNumero]
+      actualizarComandosPC(mascara, 1)
+      cookies.set("mascara", mascara, { path: "/" });
     };
 
   return (
@@ -125,8 +200,7 @@ function SimulacionRip() {
       <ModalCiscoPrimeraEtapa
         estado1={estado_primera_etapa}
         cambiarEstado1={cambiarEstadoPrimeraEtapa}
-        comandosVariable = {comandoVariable}
-        redes = {redes}
+        comandosVariable={comandoVariable}
       />
 
       <Modal show={showModal} onHide={cerrarModal}>
@@ -134,51 +208,31 @@ function SimulacionRip() {
           <Modal.Title>Configuracion de PC</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        {comandoPCPrimeraEtapa.map((comando) => {
-                  return <>
-                  <div className="mb-3">
-            <label htmlFor="nombre" className="form-label">
-            {comando.nombre}:
-            </label>
-            <input
-              type="text"
-              id="nombre"
-              name="nombre_categoria"
-              className="form-control"
-            />
-          </div>
-                  
-                  </>;
-                })}
-          
-          <div className="mb-3">
-            <label htmlFor="imagen" className="form-label">
-              Mascara de subred:
-            </label>
-            <input
-              type="text"
-              id="imagen"
-              name="imagen"
-              className="form-control"
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="imagen" className="form-label">
-              Puerta de enlace predeterminada:
-            </label>
-            <input
-              type="text"
-              id="imagen"
-              name="imagen"
-              className="form-control"
-            />
-          </div>
+          {comandoPCPrimeraEtapa.map((comando) => {
+            return (
+              <>
+                <div className="mb-3">
+                  <label htmlFor="nombre" className="form-label">
+                    {comando.nombre}:
+                  </label>
+                  <input
+                    type="text"
+                    id={comando.nombre}
+                    name={comando.name}
+                    className="form-control"
+                    value={comando.valor}
+                  />
+                  <p>{comando.explicacion}</p>
+                </div>
+              </>
+            );
+          })}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={cerrarModal}>
             Cerrar
           </Button>
-          <Button variant="primary" onClick={handleSubmit}>
+          <Button variant="primary" onClick={cerrarModal}>
             Guardar
           </Button>
         </Modal.Footer>
@@ -193,22 +247,23 @@ function SimulacionRip() {
       </MDBRow>
 
       <MDBRow>
-        <MDBCol md='10'>
+        <MDBCol md="10">
           <div className="d-flex justify-content-between align-items-center mb-5">
-              <p style={{ marginLeft: "10px" }}>
-                Instrucciones:
-                <br />
-                1. Entrar a la configuracion de los dispositivos
-                <br />
-                2. Leer las instrucciones y explicaciones de los comandos utilizados
-                <br />
-                3. Pase a la siguiente etapa
-              </p>
+            <p style={{ marginLeft: "10px" }}>
+              Instrucciones:
+              <br />
+              1. Entrar a la configuracion de los dispositivos.
+              <br />
+              2. Leer las instrucciones y explicaciones de los comandos.
+              utilizados
+              <br />
+              3. Pase a la siguiente etapa.
+            </p>
           </div>
         </MDBCol>
 
-        <MDBCol md='2'>
-          <Button  variant="danger" onClick={pasarSiguienteEtapa}>
+        <MDBCol md="2">
+          <Button variant="danger" onClick={pasarSiguienteEtapa}>
             Siguiente etapa
           </Button>
         </MDBCol>
@@ -221,7 +276,7 @@ function SimulacionRip() {
               <Button
                 variant="primary"
                 onClick={() => abrirModalPC()}
-                style={{ marginRight : '50px' }}
+                style={{ marginRight: "50px" }}
               >
                 Mostrar Configuracion
               </Button>
@@ -231,15 +286,20 @@ function SimulacionRip() {
       </MDBRow>
 
       <CanvasComponentRip lineColor={lineColor} />
-      
+
       <MDBRow>
         <MDBCol className="mb-4 mb-lg-0">
           <MDBRow>
             <MDBCol className="d-flex align-items-center justify-content-center">
               <Button
                 variant="primary"
-                onClick={() => cambiarEstadoPrimeraEtapa(!estado_primera_etapa, comandoCisco1PrimeraEtapa)}
-                style={{ marginRight : '250px' }}
+                onClick={() =>
+                  cambiarEstadoPrimeraEtapa(
+                    !estado_primera_etapa,
+                    comandoCisco1PrimeraEtapa
+                  )
+                }
+                style={{ marginRight: "250px" }}
               >
                 Mostrar Configuracion
               </Button>
@@ -252,17 +312,20 @@ function SimulacionRip() {
             <MDBCol className="d-flex align-items-center justify-content-center">
               <Button
                 variant="primary"
-                onClick={() => cambiarEstadoPrimeraEtapa(!estado_primera_etapa, comandoCisco2PrimeraEtapa)}
-                style={{ marginLeft : '210px' }}
+                onClick={() =>
+                  cambiarEstadoPrimeraEtapa(
+                    !estado_primera_etapa,
+                    comandoCisco2PrimeraEtapa
+                  )
+                }
+                style={{ marginLeft: "210px" }}
               >
                 Mostrar Configuracion
               </Button>
             </MDBCol>
           </MDBRow>
         </MDBCol>
-
       </MDBRow>
-
     </>
   );
 }

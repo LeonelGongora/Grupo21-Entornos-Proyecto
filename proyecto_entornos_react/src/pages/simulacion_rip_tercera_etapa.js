@@ -17,8 +17,10 @@ import {
 } from 'mdb-react-ui-kit';
 import BarraSuperior from '../components/BarraSuperior';
 import { Modal } from 'react-bootstrap';
-import imagen_cisco from '../images/imagen_router_cisco.jpg'
 import CanvasComponentRip from '../components/CanvasComponentRip';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 function SimulacionRipTerceraEtapa() {
 
@@ -71,16 +73,14 @@ function SimulacionRipTerceraEtapa() {
         cambiarEstado1={cambiarEstadoModal2}
       />
 
-<Modal show={showModal} onHide={cerrarModal}>
+      <Modal show={showModal} onHide={cerrarModal}>
         <Modal.Header closeButton className="bg-info shadow-sm ">
           <Modal.Title>Configuracion de PC</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        {comandoPCPrimeraEtapa.map((comando) => {
-                  return <>
-                  
-                  </>;
-                })}
+          {comandoPCPrimeraEtapa.map((comando) => {
+            return <></>;
+          })}
           <div className="mb-3">
             <label htmlFor="nombre" className="form-label">
               Direccion IP:
@@ -166,7 +166,7 @@ function SimulacionRipTerceraEtapa() {
               <Button
                 variant="primary"
                 onClick={() => abrirModalPC()}
-                style={{ marginRight : '50px' }}
+                style={{ marginRight: "50px" }}
               >
                 Mostrar Configuracion
               </Button>
@@ -178,14 +178,13 @@ function SimulacionRipTerceraEtapa() {
       <CanvasComponentRip lineColor={lineColor} />
 
       <MDBRow className="mb-3">
-
         <MDBCol className="mb-4 mb-lg-0">
           <MDBRow>
             <MDBCol className="d-flex align-items-center justify-content-center">
               <Button
                 variant="primary"
                 onClick={() => cambiarEstadoModal2(!estado_modal2)}
-                style={{ marginRight : '250px' }}
+                style={{ marginRight: "250px" }}
               >
                 Mostrar Configuracion
               </Button>
@@ -199,7 +198,7 @@ function SimulacionRipTerceraEtapa() {
               <Button
                 variant="primary"
                 onClick={() => cambiarEstadoModal2(!estado_modal2)}
-                style={{ marginLeft : '210px' }}
+                style={{ marginLeft: "210px" }}
               >
                 Mostrar Configuracion
               </Button>

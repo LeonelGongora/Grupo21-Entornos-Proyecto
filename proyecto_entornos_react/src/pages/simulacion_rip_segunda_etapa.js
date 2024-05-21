@@ -17,13 +17,23 @@ import {
 } from 'mdb-react-ui-kit';
 import BarraSuperior from '../components/BarraSuperior';
 import { Modal } from 'react-bootstrap';
-import imagen_cisco from '../images/imagen_router_cisco.jpg'
 import CanvasComponentRip from '../components/CanvasComponentRip';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 function SimulacionRipSegundaEtapa() {
 
+  const primera_red = cookies.get('primera_red');
+  const segunda_red = cookies.get('segunda_red');
+  const direccion_pc = cookies.get('direccion_pc');
+  const puerta_enlace = cookies.get('puerta_enlace');
+  const mascara = cookies.get('mascara');
+
   const [showModal, setShowModal] = useState(false);
   const [lineColor, setLineColor] = useState('white');
+  const [modalShow, setModalShow] = useState(false);
+  const [errors, setErrors] = useState({});
 
     const [estado_segunda_etapa, setSegundaEtapa] = useState(false);
     const [mostrarInstrucciones, setMostrarInstrucciones] = useState(false);
@@ -34,51 +44,73 @@ function SimulacionRipSegundaEtapa() {
       {nombre: "Puerta de enlace predeterminada", puerta_enlace: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado"},
     ]);
 
+    const [values, setValues] = useState({
+      direccion_ip : "",
+      mascara : "",
+      puerta_enlace: "",
+    });
+    
     const cambiarEstadoSegundaEtapa = (nuevoEstado) => {
       setSegundaEtapa(nuevoEstado)
-    };
-
-    const generarDesafio = () => {
-
-      let max = 10;
-      let min = 5;
-
-      var numeroAleatorio = Math.random();
-
-      // Ajustar el número al rango dado y redondearlo al entero más cercano
-      var numeroEnRango = Math.floor(numeroAleatorio * (max - min + 1)) + min;
     };
 
     const cerrarModal = () => {
       setShowModal(false); // Cerrar la ventana emergente
     };
 
-    const handleSubmit =  (e) => {
-
-    };
-
     const abrirModalPC = () => {
       setShowModal(true);
     };
 
+    const handleChange = (e) => {
+      const {name, value} = e.target;
+      setValues({
+          ...values,
+          [name]:value,
+      });
+    }
+
+    const handleSubmit = (e) => {
+      console.log(values)
+
+      const validationErrors = {};
+
+      if (!values.direccion_ip.trim()) {
+        validationErrors.direccion_ip = "Este campo es obligatorio";
+      }else if(values.direccion_ip !== direccion_pc){
+        validationErrors.direccion_ip = "Comando incorrecto";
+      }
+  
+      if (!values.mascara.trim()) {
+        validationErrors.mascara = "Este campo es obligatorio";
+      }else if(values.mascara !== mascara){
+        validationErrors.mascara = "Comando incorrecto";
+      }
+
+      if (!values.puerta_enlace.trim()) {
+        validationErrors.puerta_enlace = "Este campo es obligatorio";
+      }else if(values.puerta_enlace !== puerta_enlace){
+        validationErrors.puerta_enlace = "Comando incorrecto";
+      }
+  
+      setErrors(validationErrors);
+    }
+
   return (
     <>
-
       <ModalCiscoSegundaEtapa
         estado1={estado_segunda_etapa}
         cambiarEstado1={cambiarEstadoSegundaEtapa}
       />
 
-<Modal show={showModal} onHide={cerrarModal}>
+      <Modal show={showModal} onHide={cerrarModal}>
         <Modal.Header closeButton className="bg-info shadow-sm ">
           <Modal.Title>Configuracion de PC</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        {comandoPCPrimeraEtapa.map((comando) => {
-                  return <>
-                  
-                  </>;
-                })}
+          {comandoPCPrimeraEtapa.map((comando) => {
+            return <></>;
+          })}
           <div className="mb-3">
             <label htmlFor="nombre" className="form-label">
               Direccion IP:
@@ -86,9 +118,13 @@ function SimulacionRipSegundaEtapa() {
             <input
               type="text"
               id="nombre"
-              name="nombre_categoria"
+              name="direccion_ip"
               className="form-control"
+              onBlur={handleChange}
             />
+            {errors.direccion_ip && (
+              <span className="advertencia-creEve">{errors.direccion_ip}</span>
+            )}
           </div>
           <div className="mb-3">
             <label htmlFor="imagen" className="form-label">
@@ -97,9 +133,13 @@ function SimulacionRipSegundaEtapa() {
             <input
               type="text"
               id="imagen"
-              name="imagen"
+              name="mascara"
               className="form-control"
+              onBlur={handleChange}
             />
+            {errors.mascara && (
+              <span className="advertencia-creEve">{errors.mascara}</span>
+            )}
           </div>
           <div className="mb-3">
             <label htmlFor="imagen" className="form-label">
@@ -108,9 +148,13 @@ function SimulacionRipSegundaEtapa() {
             <input
               type="text"
               id="imagen"
-              name="imagen"
+              name="puerta_enlace"
               className="form-control"
+              onBlur={handleChange}
             />
+            {errors.puerta_enlace && (
+              <span className="advertencia-creEve">{errors.puerta_enlace}</span>
+            )}
           </div>
         </Modal.Body>
         <Modal.Footer>
@@ -137,12 +181,15 @@ function SimulacionRipSegundaEtapa() {
             <p style={{ marginLeft: "10px" }}>
               Instrucciones:
               <br />
-              1. Entrar a la configuracion de los dispositivos
+              1. Dadas las redes {primera_red} y {segunda_red}, y la mascara{" "}
+              {mascara} entrar a las configuraciones de los dispositivos.
               <br />
-              2. Leer las instrucciones y explicaciones de los comandos
-              utilizados
+              2. Completar las palabras faltantes en los comandos respectivos.
               <br />
-              3. Pase a la siguiente etapa
+              3. En el caso de equivocarse, pasar el cursor por ? para mas
+              informacion.
+              <br />
+              3. Pase a la siguiente etapa.
             </p>
           </div>
         </MDBCol>
@@ -166,7 +213,7 @@ function SimulacionRipSegundaEtapa() {
               <Button
                 variant="primary"
                 onClick={() => abrirModalPC()}
-                style={{ marginRight : '50px' }}
+                style={{ marginRight: "50px" }}
               >
                 Mostrar Configuracion
               </Button>
@@ -178,14 +225,13 @@ function SimulacionRipSegundaEtapa() {
       <CanvasComponentRip lineColor={lineColor} />
 
       <MDBRow className="mb-3">
-
         <MDBCol className="mb-4 mb-lg-0">
           <MDBRow>
             <MDBCol className="d-flex align-items-center justify-content-center">
               <Button
                 variant="primary"
                 onClick={() => cambiarEstadoSegundaEtapa(!estado_segunda_etapa)}
-                style={{ marginRight : '250px' }}
+                style={{ marginRight: "250px" }}
               >
                 Mostrar Configuracion
               </Button>
@@ -199,7 +245,7 @@ function SimulacionRipSegundaEtapa() {
               <Button
                 variant="primary"
                 onClick={() => cambiarEstadoSegundaEtapa(!estado_segunda_etapa)}
-                style={{ marginLeft : '210px' }}
+                style={{ marginLeft: "210px" }}
               >
                 Mostrar Configuracion
               </Button>

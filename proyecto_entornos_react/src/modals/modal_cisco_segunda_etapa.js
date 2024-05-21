@@ -5,6 +5,9 @@ import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import HelpIcon from '@mui/icons-material/Help';
 import '../css/error_mensaje_style.css'
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 const BootstrapTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} arrow classes={{ popper: className }} placement="top"/>
@@ -18,6 +21,9 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
 }));
 
 function ModalCiscoSegundaEtapa({estado1, cambiarEstado1}) {
+
+  const primera_red = cookies.get('primera_red');
+  const segunda_red = cookies.get('segunda_red');
 
   const [inputComando, setInputComandos] = useState('');
   const [posicionComando, setPosicionComando] = useState(0);
@@ -75,13 +81,13 @@ function ModalCiscoSegundaEtapa({estado1, cambiarEstado1}) {
 
       if (!values.tercero.trim()) {
         validationErrors.tercero = "Este campo es obligatorio";
-      }else if(values.tercero !== "version"){
+      }else if(values.tercero !== primera_red){
         validationErrors.tercero = "Comando incorrecto";
       }
 
       if (!values.cuarto.trim()) {
         validationErrors.cuarto = "Este campo es obligatorio";
-      }else if(values.cuarto !== "2"){
+      }else if(values.cuarto !== segunda_red){
         validationErrors.cuarto = "Comando incorrecto";
       }
 
@@ -94,6 +100,7 @@ function ModalCiscoSegundaEtapa({estado1, cambiarEstado1}) {
       setErrors(validationErrors);
 
       if (Object.keys(validationErrors).length === 0) {
+        //document.getElementById("Button").disabled = true;
         console.log("Sin errores");
       }
     };
