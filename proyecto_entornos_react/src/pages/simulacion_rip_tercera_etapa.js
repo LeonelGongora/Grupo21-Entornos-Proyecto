@@ -16,14 +16,24 @@ import {
   MDBModalContent,
 } from 'mdb-react-ui-kit';
 import BarraSuperior from '../components/BarraSuperior';
-
+import { Modal } from 'react-bootstrap';
 import imagen_cisco from '../images/imagen_router_cisco.jpg'
+import CanvasComponentRip from '../components/CanvasComponentRip';
+
 function SimulacionRipTerceraEtapa() {
 
     const [values, setValues] = useState({
         estado_modal_1 : false
     });
 
+    const [comandoPCPrimeraEtapa, setComandoPCPrimeraEtapa] = useState([
+      {nombre: "Direccion IP", direccion_ip: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado"},
+      {nombre: "Mascara de subred", mascara: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado"},
+      {nombre: "Puerta de enlace predeterminada", puerta_enlace: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado"},
+    ]);
+
+    const [showModal, setShowModal] = useState(false);
+    const [lineColor, setLineColor] = useState('white');
     const [estado_modal2, setEstadoModal2] = useState(false);
     const [mostrarInstrucciones, setMostrarInstrucciones] = useState(false);
 
@@ -42,12 +52,78 @@ function SimulacionRipTerceraEtapa() {
       var numeroEnRango = Math.floor(numeroAleatorio * (max - min + 1)) + min;
     };
 
+    const cerrarModal = () => {
+      setShowModal(false); // Cerrar la ventana emergente
+    };
+
+    const handleSubmit =  (e) => {
+
+    };
+
+    const abrirModalPC = () => {
+      setShowModal(true);
+    };
+
   return (
     <>
       <ModalCisco2
         estado1={estado_modal2}
         cambiarEstado1={cambiarEstadoModal2}
       />
+
+<Modal show={showModal} onHide={cerrarModal}>
+        <Modal.Header closeButton className="bg-info shadow-sm ">
+          <Modal.Title>Configuracion de PC</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        {comandoPCPrimeraEtapa.map((comando) => {
+                  return <>
+                  
+                  </>;
+                })}
+          <div className="mb-3">
+            <label htmlFor="nombre" className="form-label">
+              Direccion IP:
+            </label>
+            <input
+              type="text"
+              id="nombre"
+              name="nombre_categoria"
+              className="form-control"
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="imagen" className="form-label">
+              Mascara de subred:
+            </label>
+            <input
+              type="text"
+              id="imagen"
+              name="imagen"
+              className="form-control"
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="imagen" className="form-label">
+              Puerta de enlace predeterminada:
+            </label>
+            <input
+              type="text"
+              id="imagen"
+              name="imagen"
+              className="form-control"
+            />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={cerrarModal}>
+            Cerrar
+          </Button>
+          <Button variant="primary" onClick={handleSubmit}>
+            Guardar
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <BarraSuperior titulo="Simulacion de Protocolo RIP" />
 
@@ -84,21 +160,32 @@ function SimulacionRipTerceraEtapa() {
       </MDBRow>
 
       <MDBRow className="mb-3">
-        <MDBCol lg={4} md={12} className="mb-4 mb-lg-0">
-          <div className="bg-image hover-overlay ripple shadow-1-strong rounded">
-            <img src={imagen_cisco} className="w-100" />
-            <a style={{ cursor: "pointer" }}>
-              <div
-                className="mask"
-                style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" }}
-              ></div>
-            </a>
-          </div>
+        <MDBCol className="mb-4 mb-lg-0">
+          <MDBRow className="d-flex align-items-center justify-content-center">
+            <MDBCol className="d-flex align-items-center justify-content-center">
+              <Button
+                variant="primary"
+                onClick={() => abrirModalPC()}
+                style={{ marginRight : '50px' }}
+              >
+                Mostrar Configuracion
+              </Button>
+            </MDBCol>
+          </MDBRow>
+        </MDBCol>
+      </MDBRow>
+
+      <CanvasComponentRip lineColor={lineColor} />
+
+      <MDBRow className="mb-3">
+
+        <MDBCol className="mb-4 mb-lg-0">
           <MDBRow>
             <MDBCol className="d-flex align-items-center justify-content-center">
               <Button
                 variant="primary"
                 onClick={() => cambiarEstadoModal2(!estado_modal2)}
+                style={{ marginRight : '250px' }}
               >
                 Mostrar Configuracion
               </Button>
@@ -106,43 +193,13 @@ function SimulacionRipTerceraEtapa() {
           </MDBRow>
         </MDBCol>
 
-        <MDBCol lg={4} md={12} className="mb-4 mb-lg-0">
-          <div className="bg-image hover-overlay ripple shadow-1-strong rounded">
-            <img src={imagen_cisco} className="w-100" />
-            <a style={{ cursor: "pointer" }}>
-              <div
-                className="mask"
-                style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" }}
-              ></div>
-            </a>
-          </div>
+        <MDBCol className="mb-4 mb-lg-0">
           <MDBRow>
             <MDBCol className="d-flex align-items-center justify-content-center">
               <Button
                 variant="primary"
                 onClick={() => cambiarEstadoModal2(!estado_modal2)}
-              >
-                Mostrar Configuracion
-              </Button>
-            </MDBCol>
-          </MDBRow>
-        </MDBCol>
-
-        <MDBCol lg={4} md={12} className="mb-4 mb-lg-0">
-          <div className="bg-image hover-overlay ripple shadow-1-strong rounded">
-            <img src={imagen_cisco} className="w-100" />
-            <a style={{ cursor: "pointer" }}>
-              <div
-                className="mask"
-                style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" }}
-              ></div>
-            </a>
-          </div>
-          <MDBRow>
-            <MDBCol className="d-flex align-items-center justify-content-center">
-              <Button
-                variant="primary"
-                onClick={() => cambiarEstadoModal2(!estado_modal2)}
+                style={{ marginLeft : '210px' }}
               >
                 Mostrar Configuracion
               </Button>
