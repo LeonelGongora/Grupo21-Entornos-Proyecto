@@ -1,29 +1,28 @@
 import React, {useState, useEffect} from  'react';
-import ModalCisco1 from "../modals/modal_cisco_1";
 import ModalCisco2 from '../modals/modal_cisco_2';
-import ModalCiscoPrimeraEtapa from '../modals/modal_cisco_primera_etapa';
-import ModalCiscoSegundaEtapa from '../modals/modal_cisco_segunda_etapa';
 import Button from 'react-bootstrap/Button';
 import {
-  MDBContainer,
   MDBCol,
   MDBRow,
-  MDBModal,
-  MDBModalBody,
-  MDBModalFooter,
-  MDBBtn,
-  MDBModalDialog,
-  MDBModalContent,
 } from 'mdb-react-ui-kit';
 import BarraSuperior from '../components/BarraSuperior';
 import { Modal } from 'react-bootstrap';
 import CanvasComponentRip from '../components/CanvasComponentRip';
 import Cookies from 'universal-cookie';
+import Swal from 'sweetalert2';
 
 const cookies = new Cookies();
 
 function SimulacionRipTerceraEtapa() {
 
+  const primera_red = cookies.get('primera_red');
+  const segunda_red = cookies.get('segunda_red');
+  const direccion_pc = cookies.get('direccion_pc');
+  const puerta_enlace = cookies.get('puerta_enlace');
+  const mascara = cookies.get('mascara');
+
+  const [errors, setErrors] = useState({});
+  
     const [values, setValues] = useState({
         estado_modal_1 : false
     });
@@ -59,6 +58,32 @@ function SimulacionRipTerceraEtapa() {
     };
 
     const handleSubmit =  (e) => {
+      const validationErrors = {};
+
+      if (!values.direccion_ip.trim()) {
+        validationErrors.direccion_ip = "Este campo es obligatorio";
+      }else if(values.direccion_ip !== direccion_pc){
+        validationErrors.direccion_ip = "Comando incorrecto";
+      }
+  
+      if (!values.mascara.trim()) {
+        validationErrors.mascara = "Este campo es obligatorio";
+      }else if(values.mascara !== mascara){
+        validationErrors.mascara = "Comando incorrecto";
+      }
+
+      if (!values.puerta_enlace.trim()) {
+        validationErrors.puerta_enlace = "Este campo es obligatorio";
+      }else if(values.puerta_enlace !== puerta_enlace){
+        validationErrors.puerta_enlace = "Comando incorrecto";
+      }
+  
+      setErrors(validationErrors);
+
+      if (Object.keys(validationErrors).length === 0) {
+        cerrarModal()
+        Swal.fire('PC configurada correctamente', '','success');
+      }
 
     };
 
@@ -136,15 +161,18 @@ function SimulacionRipTerceraEtapa() {
       <MDBRow>
         <MDBCol md="10">
           <div className="d-flex justify-content-between align-items-center mb-5">
-            <p style={{ marginLeft: "10px" }}>
+          <p style={{ marginLeft: "10px" }}>
               Instrucciones:
               <br />
-              1. Entrar a la configuracion de los dispositivos
+              1. Dadas las redes {primera_red} y {segunda_red}, y la mascara{" "}
+              {mascara} entrar a las configuraciones de los dispositivos.
               <br />
-              2. Leer las instrucciones y explicaciones de los comandos
-              utilizados
+              2. Ingresar los comandos enteros.
               <br />
-              3. Pase a la siguiente etapa
+              3. En el caso de equivocarse, pasar el cursor por ? para mas
+              informacion.
+              <br />
+              3. Tras configurar todos los dispositivos,  terminar la simulacion.
             </p>
           </div>
         </MDBCol>

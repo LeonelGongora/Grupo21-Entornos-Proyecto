@@ -22,9 +22,12 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
 
 function ModalCisco2({estado1, cambiarEstado1}) {
 
+  let indice = 0;
+
   const primera_red = cookies.get('primera_red');
   const segunda_red = cookies.get('segunda_red');
-
+  const pistas_3ra_etapa_rip = cookies.get('pistas_3ra_etapa_rip');
+  
   const [inputComando, setInputComandos] = useState('');
   const [outputComando, setOutputComando] = useState('');
   const [comandoCorrecto, setComandoCorrecto] = useState(false);
@@ -32,14 +35,16 @@ function ModalCisco2({estado1, cambiarEstado1}) {
   const [mensaje, setMensaje] = useState('');
   const [comandos, setComandos] = useState([
     ["enable"],
+    ["configure", "terminal"],
     ["router", "rip"],
+    ["version", "2"],
     ["network", "primera_red"],
     ["network", "segunda_red"],
+    ["exit"],
   ]);
 
   useEffect(()=>{
     configurarComandos()
-    //generarDesafio()
   }, []);
 
     const salirVentanaModal =  () => {
@@ -51,6 +56,7 @@ function ModalCisco2({estado1, cambiarEstado1}) {
     };
   
     const handleCommandSubmit = (event) => {
+
       event.preventDefault();
       // Procesar el comando
       const result = processCommand(inputComando);
@@ -65,7 +71,8 @@ function ModalCisco2({estado1, cambiarEstado1}) {
       let comando_ingresado_separado = command.trim().split(" ");
 
       if (comandos[posicionComando].length !== comando_ingresado_separado.length) {
-        setMensaje("Pista para el estudiante");
+        //setMensaje("Pista para el estudiante");
+        setMensaje(pistas_3ra_etapa_rip[posicionComando]);
         return "Comando no reconocido. Mantenga cursor en ? para mas informacion";
       }
       return compararComando(comandos[posicionComando], comando_ingresado_separado)
@@ -76,7 +83,8 @@ function ModalCisco2({estado1, cambiarEstado1}) {
 
       for (let i = 0; i < comando_esperado.length; i++) {
         if (comando_esperado[i] !== comando_ingresado[i].toLowerCase()) {
-          setMensaje("Pista para el estudiante");
+          //setMensaje("Pista para el estudiante");
+          setMensaje(pistas_3ra_etapa_rip[posicionComando]);
           return (
             'Comando no reconocido. Error en "' +
             comando_ingresado[i] +
@@ -91,7 +99,7 @@ function ModalCisco2({estado1, cambiarEstado1}) {
             return "Correcto. Este router ya se encuentra configurado!";
           }
           setPosicionComando(nueva_posicion)
-          
+          //indice = indice + 1;
           return "Correcto.";
         }
       }

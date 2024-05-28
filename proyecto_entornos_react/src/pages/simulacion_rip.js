@@ -17,6 +17,11 @@ const cookies = new Cookies();
 
 function SimulacionRip() {
 
+  const primera_red_cookie = cookies.get('primera_red');
+  const segunda_red_cookie = cookies.get('segunda_red');
+  const mascara_cookie = cookies.get('mascara');
+  const comandos_1era_etapa_rip = cookies.get('comandos_1era_etapa_rip');
+  
   useEffect(()=>{
     generarDesafio()
     generarMascara()
@@ -24,12 +29,15 @@ function SimulacionRip() {
 
   const [showModal, setShowModal] = useState(false);
   const [siguienteEtapa, setSiguienteEtapa] = useState(true);
+  const [primera_red, setPrimeraRed] = useState("");
+  const [segunda_red, setSegundaRed] = useState("");
+  const [mascara, setMascara] = useState("");
     const [lineColor, setLineColor] = useState('white');
     const [estado_primera_etapa, setPrimeraEtapa] = useState(false);
 
     const cambiarEstadoPrimeraEtapa = (nuevoEstado, comandos) => {
-      setComandoVariable(comandos)
       setPrimeraEtapa(nuevoEstado)
+      setComandoVariable(comandos)
     };
 
     const [comandoCisco1PrimeraEtapa, setComandoCisco1PrimeraEtapa] = useState([
@@ -67,8 +75,6 @@ function SimulacionRip() {
       30: "252",
     });
 
-    const [mascara, setMascara] = useState("");
-
     const [comandoVariable, setComandoVariable] = useState([]);
 
     const [values, setValues] = useState({
@@ -78,24 +84,25 @@ function SimulacionRip() {
     });
 
     const generarDesafio = () => {
+      setComandoCisco1PrimeraEtapa(comandos_1era_etapa_rip)
 
-      
-      let primera_red = generarRed()
-      actualizarComando(primera_red, 4)
+      //let primera_red = generarRed()
+      actualizarComando(primera_red_cookie, 4)
+      setPrimeraRed(primera_red_cookie);
 
-      let segunda_red = generarSegundaRed(primera_red, 2)
-      actualizarComando(segunda_red, 5)
+      //let segunda_red = generarSegundaRed(primera_red, 2)
+      actualizarComando(segunda_red_cookie, 5)
+      setSegundaRed(segunda_red_cookie);
 
-
-      let puerta_enlace = generarSegundaRed(primera_red, 3)
+      let puerta_enlace = generarSegundaRed(primera_red_cookie, 3)
 
       let direccion_pc = generarSegundaRed(puerta_enlace, 3)
 
       actualizarComandosPC(puerta_enlace, 2)
       actualizarComandosPC(direccion_pc, 0)
-
-      cookies.set("primera_red", primera_red, { path: "/" });
-      cookies.set("segunda_red", segunda_red, { path: "/" });
+      
+      cookies.set("primera_red", primera_red_cookie, { path: "/" });
+      cookies.set("segunda_red", segunda_red_cookie, { path: "/" });
       cookies.set("direccion_pc", direccion_pc, { path: "/" });
       cookies.set("puerta_enlace", puerta_enlace, { path: "/" });
     };
@@ -184,6 +191,7 @@ function SimulacionRip() {
     };
 
     const generarMascara = () => {
+      /* 
       let max = 24;
       let min = 30;
 
@@ -191,8 +199,10 @@ function SimulacionRip() {
       var primerNumero = Math.floor(numeroAleatorio * (max - min + 1)) + min;
 
       let mascara = "255.255.255." + mascaras[primerNumero]
+      setMascara(mascara);
       actualizarComandosPC(mascara, 1)
-      cookies.set("mascara", mascara, { path: "/" });
+      */
+      setMascara(mascara_cookie)
     };
 
   return (
@@ -249,15 +259,17 @@ function SimulacionRip() {
       <MDBRow>
         <MDBCol md="10">
           <div className="d-flex justify-content-between align-items-center mb-5">
-            <p style={{ marginLeft: "10px" }}>
+          <p style={{ marginLeft: "10px" }}>
               Instrucciones:
               <br />
-              1. Entrar a la configuracion de los dispositivos.
+              1. Dadas las redes {primera_red} y {segunda_red}, y la mascara{" "}
+              {mascara} 
               <br />
-              2. Leer las instrucciones y explicaciones de los comandos.
-              utilizados
+              entrar a las configuraciones de los dispositivos.
+              2. Leer las instrucciones y explicaciones de los comandos
+              utilizados.
               <br />
-              3. Pase a la siguiente etapa.
+              3. Tras leer todas las instrucciones, pase a la siguiente etapa.
             </p>
           </div>
         </MDBCol>

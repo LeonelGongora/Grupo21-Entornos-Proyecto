@@ -1,24 +1,15 @@
 import React, {useState, useEffect} from  'react';
-import ModalCisco1 from "../modals/modal_cisco_1";
-import ModalCisco2 from '../modals/modal_cisco_2';
-import ModalCiscoPrimeraEtapa from '../modals/modal_cisco_primera_etapa';
 import ModalCiscoSegundaEtapa from '../modals/modal_cisco_segunda_etapa';
 import Button from 'react-bootstrap/Button';
 import {
-  MDBContainer,
   MDBCol,
   MDBRow,
-  MDBModal,
-  MDBModalBody,
-  MDBModalFooter,
-  MDBBtn,
-  MDBModalDialog,
-  MDBModalContent,
 } from 'mdb-react-ui-kit';
 import BarraSuperior from '../components/BarraSuperior';
 import { Modal } from 'react-bootstrap';
 import CanvasComponentRip from '../components/CanvasComponentRip';
 import Cookies from 'universal-cookie';
+import Swal from 'sweetalert2';
 
 const cookies = new Cookies();
 
@@ -29,19 +20,32 @@ function SimulacionRipSegundaEtapa() {
   const direccion_pc = cookies.get('direccion_pc');
   const puerta_enlace = cookies.get('puerta_enlace');
   const mascara = cookies.get('mascara');
+  const comandos_2da_etapa_rip = cookies.get('comandos_2da_etapa_rip');
+
+  useEffect(()=>{
+    establecerComandos();
+  }, []);
 
   const [showModal, setShowModal] = useState(false);
   const [lineColor, setLineColor] = useState('white');
-  const [modalShow, setModalShow] = useState(false);
   const [errors, setErrors] = useState({});
 
-    const [estado_segunda_etapa, setSegundaEtapa] = useState(false);
-    const [mostrarInstrucciones, setMostrarInstrucciones] = useState(false);
+  const [comandoVariable, setComandoVariable] = useState([]);
 
-    const [comandoPCPrimeraEtapa, setComandoPCPrimeraEtapa] = useState([
+    const [estado_segunda_etapa, setSegundaEtapa] = useState(false);
+
+    const [comandoPC2daEtapa, setComandoPCPrimeraEtapa] = useState([
       {nombre: "Direccion IP", direccion_ip: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado"},
       {nombre: "Mascara de subred", mascara: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado"},
       {nombre: "Puerta de enlace predeterminada", puerta_enlace: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado"},
+    ]);
+
+    const [comandosSegundaEtapa, setComandosSegundaEtapa] = useState([
+      {comando: "configure", respuesta: "terminal", posicion : 1 , pista: "", orden: "primero"},
+      {comando: "router", respuesta: "rip", posicion : 1 , pista: "", orden: "segundo"},
+      {comando: "2", respuesta: "version", posicion : 0 , pista: "", orden: "tercero"},
+      {comando: "network", respuesta: "", posicion : 1 , pista: "", orden: "cuarto"},
+      {comando: "network", respuesta: "", posicion : 1 , pista: "", orden: "quinto"},
     ]);
 
     const [values, setValues] = useState({
@@ -50,8 +54,9 @@ function SimulacionRipSegundaEtapa() {
       puerta_enlace: "",
     });
     
-    const cambiarEstadoSegundaEtapa = (nuevoEstado) => {
+    const cambiarEstadoSegundaEtapa = (nuevoEstado, comandos) => {
       setSegundaEtapa(nuevoEstado)
+      setComandoVariable(comandos)
     };
 
     const cerrarModal = () => {
@@ -71,7 +76,6 @@ function SimulacionRipSegundaEtapa() {
     }
 
     const handleSubmit = (e) => {
-      console.log(values)
 
       const validationErrors = {};
 
@@ -94,13 +98,37 @@ function SimulacionRipSegundaEtapa() {
       }
   
       setErrors(validationErrors);
+
+      if (Object.keys(validationErrors).length === 0) {
+        cerrarModal()
+        Swal.fire('PC configurada correctamente', '','success');
+      }
     }
+
+    const establecerComandos = () => {
+      setComandosSegundaEtapa(comandos_2da_etapa_rip);
+      actualizarRedes2daEtapa(primera_red, 3);
+      actualizarRedes2daEtapa(segunda_red, 4);
+    }
+
+    const actualizarRedes2daEtapa = (nuevoComando, indice) => {
+      setComandosSegundaEtapa((prevState) => {
+        const nuevoEstado = prevState.map((item, index) => {
+          if (index === indice) { 
+            return { ...item, respuesta: nuevoComando };
+          }
+          return item;
+        });
+        return nuevoEstado;
+      });
+    };
 
   return (
     <>
       <ModalCiscoSegundaEtapa
         estado1={estado_segunda_etapa}
         cambiarEstado1={cambiarEstadoSegundaEtapa}
+        comandosVariable={comandoVariable}
       />
 
       <Modal show={showModal} onHide={cerrarModal}>
@@ -108,7 +136,7 @@ function SimulacionRipSegundaEtapa() {
           <Modal.Title>Configuracion de PC</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {comandoPCPrimeraEtapa.map((comando) => {
+          {comandoPC2daEtapa.map((comando) => {
             return <></>;
           })}
           <div className="mb-3">
@@ -189,7 +217,7 @@ function SimulacionRipSegundaEtapa() {
               3. En el caso de equivocarse, pasar el cursor por ? para mas
               informacion.
               <br />
-              3. Pase a la siguiente etapa.
+              3. Tras configurar todos los dispositivos, pase a la siguiente etapa.
             </p>
           </div>
         </MDBCol>
@@ -230,7 +258,7 @@ function SimulacionRipSegundaEtapa() {
             <MDBCol className="d-flex align-items-center justify-content-center">
               <Button
                 variant="primary"
-                onClick={() => cambiarEstadoSegundaEtapa(!estado_segunda_etapa)}
+                onClick={() => cambiarEstadoSegundaEtapa(!estado_segunda_etapa, comandosSegundaEtapa)}
                 style={{ marginRight: "250px" }}
               >
                 Mostrar Configuracion
