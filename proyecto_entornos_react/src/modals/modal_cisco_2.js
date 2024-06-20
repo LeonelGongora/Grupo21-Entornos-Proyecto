@@ -30,7 +30,6 @@ function ModalCisco2({estado1, cambiarEstado1}) {
   
   const [inputComando, setInputComandos] = useState('');
   const [outputComando, setOutputComando] = useState('');
-  const [comandoCorrecto, setComandoCorrecto] = useState(false);
   const [posicionComando, setPosicionComando] = useState(0);
   const [mensaje, setMensaje] = useState('');
   const [comandos, setComandos] = useState([

@@ -1,8 +1,5 @@
 import React, {useState, useEffect} from  'react';
-import ModalCisco1 from "../modals/modal_cisco_1";
-import ModalCisco2 from '../modals/modal_cisco_2';
 import ModalCiscoPrimeraEtapa from '../modals/modal_cisco_primera_etapa';
-import ModalCiscoSegundaEtapa from '../modals/modal_cisco_segunda_etapa';
 import Button from 'react-bootstrap/Button';
 import CanvasComponentRip from '../components/CanvasComponentRip';
 import {
@@ -11,6 +8,9 @@ import {
 } from 'mdb-react-ui-kit';
 import BarraSuperior from '../components/BarraSuperior';
 import { Modal } from 'react-bootstrap';
+import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
+import { Col, Row } from 'react-bootstrap';
+import Container from 'react-bootstrap/Container';
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
@@ -21,24 +21,28 @@ function SimulacionRip() {
   const segunda_red_cookie = cookies.get('segunda_red');
   const mascara_cookie = cookies.get('mascara');
   const comandos_1era_etapa_rip = cookies.get('comandos_1era_etapa_rip');
-  
+
   useEffect(()=>{
     generarDesafio()
     generarMascara()
   }, []);
 
   const [showModal, setShowModal] = useState(false);
+  const [puntuacion1eraEtapa, setPuntuacion1eraEtapa] = useState(false);
+  const [modalCisco1, setModalCisco1] = useState(false);
+
   const [siguienteEtapa, setSiguienteEtapa] = useState(true);
   const [primera_red, setPrimeraRed] = useState("");
   const [segunda_red, setSegundaRed] = useState("");
   const [mascara, setMascara] = useState("");
-    const [lineColor, setLineColor] = useState('white');
-    const [estado_primera_etapa, setPrimeraEtapa] = useState(false);
+  const [lineColor, setLineColor] = useState("white");
+  const [estado_primera_etapa, setPrimeraEtapa] = useState(false);
+  const [puntuacion, setPuntuacion] = useState(0);
 
-    const cambiarEstadoPrimeraEtapa = (nuevoEstado, comandos) => {
-      setPrimeraEtapa(nuevoEstado)
-      setComandoVariable(comandos)
-    };
+  const cambiarEstadoPrimeraEtapa = (nuevoEstado, comandos) => {
+    setPrimeraEtapa(nuevoEstado);
+    setComandoVariable(comandos);
+  };
 
     const [comandoCisco1PrimeraEtapa, setComandoCisco1PrimeraEtapa] = useState([
       {comando: "enable", explicacion: "El comando enable se utiliza para acceder al modo EXEC privilegiado", pista: 'Esto es una ayuda'},
@@ -149,20 +153,17 @@ function SimulacionRip() {
       return primerNumero;
     };
 
-    const cerrarModal = () => {
-      setShowModal(false); // Cerrar la ventana emergente
-    };
-
-    const abrirModalPC = () => {
-      setShowModal(true);
-    };
-
     const pasarSiguienteEtapa = () => {
       if(siguienteEtapa){
         window.location.href = "./simulacionRipSegundaEtapa"
+
       }else{
         
       }
+    };
+
+    const evaluar1raEtapa = () => {
+      setPuntuacion1eraEtapa(true);
     };
 
     const actualizarComandosPC = (nuevoComando, indice) => {
@@ -205,13 +206,85 @@ function SimulacionRip() {
       setMascara(mascara_cookie)
     };
 
+    const cerrarModal = () => {
+      setShowModal(false); 
+      setPuntuacion(prevPuntuacion => prevPuntuacion + 50);
+    };
+
+    const cerrarCisco1 = () => {
+      setModalCisco1(false) 
+      setPuntuacion(prevPuntuacion => prevPuntuacion + 50);
+    };
+
   return (
     <>
-      <ModalCiscoPrimeraEtapa
-        estado1={estado_primera_etapa}
-        cambiarEstado1={cambiarEstadoPrimeraEtapa}
-        comandosVariable={comandoVariable}
-      />
+      <Modal
+        show={puntuacion1eraEtapa}
+        onHide={() => setPuntuacion1eraEtapa(false)}
+        centered
+        size="lg"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Evaluacion de 1ra etapa</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Row>
+            <Col>
+              <Row>
+                <Col className="d-flex align-items-center justify-content-center">
+                  <h3>Puntuacion</h3>
+                </Col>
+              </Row>
+              <Row>
+                <Gauge
+                  value={puntuacion}
+                  startAngle={-110}
+                  endAngle={110}
+                  width={300}
+                  height={300}
+                  sx={{
+                    [`& .${gaugeClasses.valueText}`]: {
+                      fontSize: 40,
+                      transform: "translate(0px, 0px)",
+                    },
+                  }}
+                  text={({ value, valueMax }) => `${value} / ${valueMax}`}
+                />
+              </Row>
+            </Col>
+
+            <Col>
+              <Row>
+                <Col className="d-flex align-items-center justify-content-center">
+                  <h3>Errores</h3>
+                </Col>
+              </Row>
+              <Row>
+                <Gauge
+                  width={250}
+                  height={250}
+                  value={0}
+                  startAngle={-110}
+                  endAngle={110}
+                  sx={(theme) => ({
+                    [`& .${gaugeClasses.valueText}`]: {
+                      fontSize: 40,
+                    },
+                    [`& .${gaugeClasses.valueArc}`]: {
+                      fill: "#ff0000",
+                    },
+                  })}
+                />
+              </Row>
+            </Col>
+          </Row>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={() => pasarSiguienteEtapa()}>
+            Pasar a siguiente etapa
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <Modal show={showModal} onHide={cerrarModal}>
         <Modal.Header closeButton className="bg-info shadow-sm ">
@@ -242,8 +315,50 @@ function SimulacionRip() {
           <Button variant="secondary" onClick={cerrarModal}>
             Cerrar
           </Button>
-          <Button variant="primary" onClick={cerrarModal}>
-            Guardar
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={modalCisco1}
+        onHide={() => cerrarCisco1()}
+        centered
+        size="lg"
+      >
+        <Modal.Header closeButton className="bg-info shadow-sm ">
+          <Modal.Title>Cisco No 1</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Container
+            className="overflow-auto my-4"
+            style={{ overflowY: "scroll", height: "380px" }}
+          >
+            <div className="console">
+              {comandoCisco1PrimeraEtapa.map((comando) => {
+                return (
+                  <>
+                    <Row className="mb-3">
+                      <Row>
+                        <Col>
+                          <pre>
+                            {">"} {comando.comando}
+                          </pre>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <p>{comando.explicacion}</p>
+                        </Col>
+                      </Row>
+                    </Row>
+                  </>
+                );
+              })}
+            </div>
+          </Container>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => cerrarCisco1()}>
+            Cerrar
           </Button>
         </Modal.Footer>
       </Modal>
@@ -259,15 +374,14 @@ function SimulacionRip() {
       <MDBRow>
         <MDBCol md="10">
           <div className="d-flex justify-content-between align-items-center mb-5">
-          <p style={{ marginLeft: "10px" }}>
+            <p style={{ marginLeft: "10px" }}>
               Instrucciones:
               <br />
               1. Dadas las redes {primera_red} y {segunda_red}, y la mascara{" "}
-              {mascara} 
+              {mascara}
               <br />
-              entrar a las configuraciones de los dispositivos.
-              2. Leer las instrucciones y explicaciones de los comandos
-              utilizados.
+              entrar a las configuraciones de los dispositivos. 2. Leer las
+              instrucciones y explicaciones de los comandos utilizados.
               <br />
               3. Tras leer todas las instrucciones, pase a la siguiente etapa.
             </p>
@@ -275,8 +389,8 @@ function SimulacionRip() {
         </MDBCol>
 
         <MDBCol md="2">
-          <Button variant="danger" onClick={pasarSiguienteEtapa}>
-            Siguiente etapa
+          <Button variant="danger" onClick={evaluar1raEtapa}>
+            Evaluar etapa
           </Button>
         </MDBCol>
       </MDBRow>
@@ -287,7 +401,7 @@ function SimulacionRip() {
             <MDBCol className="d-flex align-items-center justify-content-center">
               <Button
                 variant="primary"
-                onClick={() => abrirModalPC()}
+                onClick={() => setShowModal(true)}
                 style={{ marginRight: "50px" }}
               >
                 Mostrar Configuracion
@@ -305,12 +419,7 @@ function SimulacionRip() {
             <MDBCol className="d-flex align-items-center justify-content-center">
               <Button
                 variant="primary"
-                onClick={() =>
-                  cambiarEstadoPrimeraEtapa(
-                    !estado_primera_etapa,
-                    comandoCisco1PrimeraEtapa
-                  )
-                }
+                onClick={() => setModalCisco1(true)}
                 style={{ marginRight: "250px" }}
               >
                 Mostrar Configuracion
